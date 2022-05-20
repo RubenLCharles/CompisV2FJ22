@@ -1,0 +1,3585 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ARC
+    CHAR_TYPE
+    CIRCLE
+    COLOR
+    COMMENT
+    FLOAT_TYPE
+    GTE_LOG
+    INT_TYPE
+    LINE
+    LTE_LOG
+    NEW_LINE
+    PENDOWN
+    PENUP
+    POINT
+    SIZE
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> PROGRAM ID SEMIC dec_var_gob def_funciones main
+Rule 2     dec_var_gob -> VARS tipos COLON lista_ids SEMIC dec_var_aux
+Rule 3     dec_var_gob -> empty
+Rule 4     dec_var_aux -> tipos COLON lista_ids SEMIC dec_var_aux
+Rule 5     dec_var_aux -> empty
+Rule 6     lista_ids -> ID lista_aux lista_aux_b
+Rule 7     lista_aux -> LBRACK INT_CTE RBRACK
+Rule 8     lista_aux -> empty
+Rule 9     lista_aux_b -> COMMA lista_ids
+Rule 10    lista_aux_b -> empty
+Rule 11    tipos -> INT_CTE
+Rule 12    tipos -> FLOAT_CTE
+Rule 13    tipos -> CHAR_CTE
+Rule 14    def_funciones -> FUNCTION tipos_func ID LPAREN parametros RPAREN SEMIC dec_var_loc bloque
+Rule 15    def_funciones -> empty
+Rule 16    tipos_func -> INT_CTE
+Rule 17    tipos_func -> FLOAT_CTE
+Rule 18    tipos_func -> CHAR_CTE
+Rule 19    tipos_func -> VOID
+Rule 20    dec_var_loc -> VARS tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec
+Rule 21    dec_var_loc -> empty
+Rule 22    dec_var_loc_aux -> COMMA ID dec_var_loc_aux
+Rule 23    dec_var_loc_aux -> empty
+Rule 24    var_loc_rec -> tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec
+Rule 25    var_loc_rec -> empty
+Rule 26    parametros -> tipos COLON ID param_aux
+Rule 27    param_aux -> COMMA parametros
+Rule 28    param_aux -> empty
+Rule 29    main -> MAIN LPAREN RPAREN bloque
+Rule 30    bloque -> LCURLY estatutos estatu_rec RCURLY
+Rule 31    estatu_rec -> estatutos estatu_rec
+Rule 32    estatu_rec -> empty
+Rule 33    estatutos -> asignacion
+Rule 34    estatutos -> llamada_func
+Rule 35    estatutos -> llamada_void
+Rule 36    estatutos -> retorno
+Rule 37    estatutos -> lectura
+Rule 38    estatutos -> escritura
+Rule 39    estatutos -> decision
+Rule 40    estatutos -> loop_cond
+Rule 41    estatutos -> loop_no_cond
+Rule 42    estatutos -> expresiones
+Rule 43    estatutos -> empty
+Rule 44    asignacion -> ID ASSIGN expresiones
+Rule 45    llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC
+Rule 46    llamada_func_aux -> ID llama_func_auxb
+Rule 47    llamada_func_aux -> empty
+Rule 48    llama_func_auxb -> COMMA llamada_func_aux
+Rule 49    llama_func_auxb -> empty
+Rule 50    llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC
+Rule 51    llamada_void_aux -> ID llama_void_auxb
+Rule 52    llamada_void_aux -> empty
+Rule 53    llama_void_auxb -> COMMA llamada_func_aux
+Rule 54    llama_void_auxb -> empty
+Rule 55    retorno -> RETURN LPAREN expresiones RPAREN SEMIC
+Rule 56    lectura -> READ LPAREN ID lec_aux RPAREN SEMIC
+Rule 57    lec_aux -> COMMA ID lec_aux
+Rule 58    lec_aux -> empty
+Rule 59    escritura -> WRITE LPAREN esc_aux RPAREN SEMIC
+Rule 60    esc_aux -> STRING_CTE esc_rec
+Rule 61    esc_aux -> expresiones esc_rec
+Rule 62    esc_aux -> empty
+Rule 63    esc_rec -> COMMA esc_aux
+Rule 64    esc_rec -> empty
+Rule 65    decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux
+Rule 66    dec_aux -> else
+Rule 67    dec_aux -> empty
+Rule 68    else -> ELSE bloque
+Rule 69    loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque
+Rule 70    loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque
+Rule 71    nocond_aux -> LBRACK expresiones RBRACK
+Rule 72    nocond_aux -> empty
+Rule 73    expresiones -> t_exp or_check
+Rule 74    or_check -> OR_LOG expresiones
+Rule 75    or_check -> empty
+Rule 76    t_exp -> g_exp and_check
+Rule 77    and_check -> AND_LOG t_exp
+Rule 78    and_check -> empty
+Rule 79    g_exp -> m_exp op_check
+Rule 80    op_check -> empty
+Rule 81    op_check -> comparacion m_exp
+Rule 82    comparacion -> GT_LOG
+Rule 83    comparacion -> LT_LOG
+Rule 84    comparacion -> EQUAL_LOG
+Rule 85    comparacion -> NE_LOG
+Rule 86    m_exp -> termino m_rec
+Rule 87    m_rec -> PLUS_OP m_exp
+Rule 88    m_rec -> MINUS_OP m_exp
+Rule 89    m_rec -> empty
+Rule 90    termino -> factor term_rec
+Rule 91    term_rec -> MULT_OP termino
+Rule 92    term_rec -> DIV_OP termino
+Rule 93    term_rec -> empty
+Rule 94    factor -> LPAREN expresiones RPAREN
+Rule 95    factor -> INT_CTE
+Rule 96    factor -> FLOAT_CTE
+Rule 97    factor -> ID
+Rule 98    factor -> llamada_func
+Rule 99    empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND_LOG              : 77
+ARC                  : 
+ASSIGN               : 44 70
+CHAR_CTE             : 13 18
+CHAR_TYPE            : 
+CIRCLE               : 
+COLON                : 2 4 20 24 26
+COLOR                : 
+COMMA                : 9 22 27 48 53 57 63
+COMMENT              : 
+DIV_OP               : 92
+DO                   : 69 70
+ELSE                 : 68
+EQUAL_LOG            : 84
+FLOAT_CTE            : 12 17 96
+FLOAT_TYPE           : 
+FOR                  : 70
+FUNCTION             : 14
+GTE_LOG              : 
+GT_LOG               : 82
+ID                   : 1 6 14 20 22 24 26 44 45 46 50 51 56 57 70 97
+IF                   : 65
+INT_CTE              : 7 11 16 95
+INT_TYPE             : 
+LBRACK               : 7 71
+LCURLY               : 30
+LINE                 : 
+LPAREN               : 14 29 45 50 55 56 59 65 69 94
+LTE_LOG              : 
+LT_LOG               : 83
+MAIN                 : 29
+MINUS_OP             : 88
+MULT_OP              : 91
+NEW_LINE             : 
+NE_LOG               : 85
+OR_LOG               : 74
+PENDOWN              : 
+PENUP                : 
+PLUS_OP              : 87
+POINT                : 
+PROGRAM              : 1
+RBRACK               : 7 71
+RCURLY               : 30
+READ                 : 56
+RETURN               : 55
+RPAREN               : 14 29 45 50 55 56 59 65 69 94
+SEMIC                : 1 2 4 14 20 24 45 50 55 56 59
+SIZE                 : 
+STRING_CTE           : 60
+THEN                 : 65
+TO                   : 70
+VARS                 : 2 20
+VOID                 : 19
+WHILE                : 69
+WRITE                : 59
+error                : 
+
+Nonterminals, with rules where they appear
+
+and_check            : 76
+asignacion           : 33
+bloque               : 14 29 65 68 69 70
+comparacion          : 81
+dec_aux              : 65
+dec_var_aux          : 2 4
+dec_var_gob          : 1
+dec_var_loc          : 14
+dec_var_loc_aux      : 20 22 24
+decision             : 39
+def_funciones        : 1
+else                 : 66
+empty                : 3 5 8 10 15 21 23 25 28 32 43 47 49 52 54 58 62 64 67 72 75 78 80 89 93
+esc_aux              : 59 63
+esc_rec              : 60 61
+escritura            : 38
+estatu_rec           : 30 31
+estatutos            : 30 31
+expresiones          : 42 44 55 61 65 69 70 70 71 74 94
+factor               : 90
+g_exp                : 76
+lec_aux              : 56 57
+lectura              : 37
+lista_aux            : 6
+lista_aux_b          : 6
+lista_ids            : 2 4 9
+llama_func_auxb      : 46
+llama_void_auxb      : 51
+llamada_func         : 34 98
+llamada_func_aux     : 45 48 53
+llamada_void         : 35
+llamada_void_aux     : 50
+loop_cond            : 40
+loop_no_cond         : 41
+m_exp                : 79 81 87 88
+m_rec                : 86
+main                 : 1
+nocond_aux           : 70
+op_check             : 79
+or_check             : 73
+param_aux            : 26
+parametros           : 14 27
+program              : 0
+retorno              : 36
+t_exp                : 73 77
+term_rec             : 90
+termino              : 86 91 92
+tipos                : 2 4 20 24 26
+tipos_func           : 14
+var_loc_rec          : 20 24
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . PROGRAM ID SEMIC dec_var_gob def_funciones main
+
+    PROGRAM         shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> PROGRAM . ID SEMIC dec_var_gob def_funciones main
+
+    ID              shift and go to state 3
+
+
+state 3
+
+    (1) program -> PROGRAM ID . SEMIC dec_var_gob def_funciones main
+
+    SEMIC           shift and go to state 4
+
+
+state 4
+
+    (1) program -> PROGRAM ID SEMIC . dec_var_gob def_funciones main
+    (2) dec_var_gob -> . VARS tipos COLON lista_ids SEMIC dec_var_aux
+    (3) dec_var_gob -> . empty
+    (99) empty -> .
+
+    VARS            shift and go to state 6
+    FUNCTION        reduce using rule 99 (empty -> .)
+    MAIN            reduce using rule 99 (empty -> .)
+
+    dec_var_gob                    shift and go to state 5
+    empty                          shift and go to state 7
+
+state 5
+
+    (1) program -> PROGRAM ID SEMIC dec_var_gob . def_funciones main
+    (14) def_funciones -> . FUNCTION tipos_func ID LPAREN parametros RPAREN SEMIC dec_var_loc bloque
+    (15) def_funciones -> . empty
+    (99) empty -> .
+
+    FUNCTION        shift and go to state 9
+    MAIN            reduce using rule 99 (empty -> .)
+
+    def_funciones                  shift and go to state 8
+    empty                          shift and go to state 10
+
+state 6
+
+    (2) dec_var_gob -> VARS . tipos COLON lista_ids SEMIC dec_var_aux
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+
+    tipos                          shift and go to state 11
+
+state 7
+
+    (3) dec_var_gob -> empty .
+
+    FUNCTION        reduce using rule 3 (dec_var_gob -> empty .)
+    MAIN            reduce using rule 3 (dec_var_gob -> empty .)
+
+
+state 8
+
+    (1) program -> PROGRAM ID SEMIC dec_var_gob def_funciones . main
+    (29) main -> . MAIN LPAREN RPAREN bloque
+
+    MAIN            shift and go to state 16
+
+    main                           shift and go to state 15
+
+state 9
+
+    (14) def_funciones -> FUNCTION . tipos_func ID LPAREN parametros RPAREN SEMIC dec_var_loc bloque
+    (16) tipos_func -> . INT_CTE
+    (17) tipos_func -> . FLOAT_CTE
+    (18) tipos_func -> . CHAR_CTE
+    (19) tipos_func -> . VOID
+
+    INT_CTE         shift and go to state 18
+    FLOAT_CTE       shift and go to state 19
+    CHAR_CTE        shift and go to state 20
+    VOID            shift and go to state 21
+
+    tipos_func                     shift and go to state 17
+
+state 10
+
+    (15) def_funciones -> empty .
+
+    MAIN            reduce using rule 15 (def_funciones -> empty .)
+
+
+state 11
+
+    (2) dec_var_gob -> VARS tipos . COLON lista_ids SEMIC dec_var_aux
+
+    COLON           shift and go to state 22
+
+
+state 12
+
+    (11) tipos -> INT_CTE .
+
+    COLON           reduce using rule 11 (tipos -> INT_CTE .)
+
+
+state 13
+
+    (12) tipos -> FLOAT_CTE .
+
+    COLON           reduce using rule 12 (tipos -> FLOAT_CTE .)
+
+
+state 14
+
+    (13) tipos -> CHAR_CTE .
+
+    COLON           reduce using rule 13 (tipos -> CHAR_CTE .)
+
+
+state 15
+
+    (1) program -> PROGRAM ID SEMIC dec_var_gob def_funciones main .
+
+    $end            reduce using rule 1 (program -> PROGRAM ID SEMIC dec_var_gob def_funciones main .)
+
+
+state 16
+
+    (29) main -> MAIN . LPAREN RPAREN bloque
+
+    LPAREN          shift and go to state 23
+
+
+state 17
+
+    (14) def_funciones -> FUNCTION tipos_func . ID LPAREN parametros RPAREN SEMIC dec_var_loc bloque
+
+    ID              shift and go to state 24
+
+
+state 18
+
+    (16) tipos_func -> INT_CTE .
+
+    ID              reduce using rule 16 (tipos_func -> INT_CTE .)
+
+
+state 19
+
+    (17) tipos_func -> FLOAT_CTE .
+
+    ID              reduce using rule 17 (tipos_func -> FLOAT_CTE .)
+
+
+state 20
+
+    (18) tipos_func -> CHAR_CTE .
+
+    ID              reduce using rule 18 (tipos_func -> CHAR_CTE .)
+
+
+state 21
+
+    (19) tipos_func -> VOID .
+
+    ID              reduce using rule 19 (tipos_func -> VOID .)
+
+
+state 22
+
+    (2) dec_var_gob -> VARS tipos COLON . lista_ids SEMIC dec_var_aux
+    (6) lista_ids -> . ID lista_aux lista_aux_b
+
+    ID              shift and go to state 26
+
+    lista_ids                      shift and go to state 25
+
+state 23
+
+    (29) main -> MAIN LPAREN . RPAREN bloque
+
+    RPAREN          shift and go to state 27
+
+
+state 24
+
+    (14) def_funciones -> FUNCTION tipos_func ID . LPAREN parametros RPAREN SEMIC dec_var_loc bloque
+
+    LPAREN          shift and go to state 28
+
+
+state 25
+
+    (2) dec_var_gob -> VARS tipos COLON lista_ids . SEMIC dec_var_aux
+
+    SEMIC           shift and go to state 29
+
+
+state 26
+
+    (6) lista_ids -> ID . lista_aux lista_aux_b
+    (7) lista_aux -> . LBRACK INT_CTE RBRACK
+    (8) lista_aux -> . empty
+    (99) empty -> .
+
+    LBRACK          shift and go to state 31
+    COMMA           reduce using rule 99 (empty -> .)
+    SEMIC           reduce using rule 99 (empty -> .)
+
+    lista_aux                      shift and go to state 30
+    empty                          shift and go to state 32
+
+state 27
+
+    (29) main -> MAIN LPAREN RPAREN . bloque
+    (30) bloque -> . LCURLY estatutos estatu_rec RCURLY
+
+    LCURLY          shift and go to state 34
+
+    bloque                         shift and go to state 33
+
+state 28
+
+    (14) def_funciones -> FUNCTION tipos_func ID LPAREN . parametros RPAREN SEMIC dec_var_loc bloque
+    (26) parametros -> . tipos COLON ID param_aux
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+
+    parametros                     shift and go to state 35
+    tipos                          shift and go to state 36
+
+state 29
+
+    (2) dec_var_gob -> VARS tipos COLON lista_ids SEMIC . dec_var_aux
+    (4) dec_var_aux -> . tipos COLON lista_ids SEMIC dec_var_aux
+    (5) dec_var_aux -> . empty
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+    (99) empty -> .
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+    FUNCTION        reduce using rule 99 (empty -> .)
+    MAIN            reduce using rule 99 (empty -> .)
+
+    tipos                          shift and go to state 37
+    dec_var_aux                    shift and go to state 38
+    empty                          shift and go to state 39
+
+state 30
+
+    (6) lista_ids -> ID lista_aux . lista_aux_b
+    (9) lista_aux_b -> . COMMA lista_ids
+    (10) lista_aux_b -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 41
+    SEMIC           reduce using rule 99 (empty -> .)
+
+    lista_aux_b                    shift and go to state 40
+    empty                          shift and go to state 42
+
+state 31
+
+    (7) lista_aux -> LBRACK . INT_CTE RBRACK
+
+    INT_CTE         shift and go to state 43
+
+
+state 32
+
+    (8) lista_aux -> empty .
+
+    COMMA           reduce using rule 8 (lista_aux -> empty .)
+    SEMIC           reduce using rule 8 (lista_aux -> empty .)
+
+
+state 33
+
+    (29) main -> MAIN LPAREN RPAREN bloque .
+
+    $end            reduce using rule 29 (main -> MAIN LPAREN RPAREN bloque .)
+
+
+state 34
+
+    (30) bloque -> LCURLY . estatutos estatu_rec RCURLY
+    (33) estatutos -> . asignacion
+    (34) estatutos -> . llamada_func
+    (35) estatutos -> . llamada_void
+    (36) estatutos -> . retorno
+    (37) estatutos -> . lectura
+    (38) estatutos -> . escritura
+    (39) estatutos -> . decision
+    (40) estatutos -> . loop_cond
+    (41) estatutos -> . loop_no_cond
+    (42) estatutos -> . expresiones
+    (43) estatutos -> . empty
+    (44) asignacion -> . ID ASSIGN expresiones
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+    (50) llamada_void -> . ID LPAREN llamada_void_aux RPAREN SEMIC
+    (55) retorno -> . RETURN LPAREN expresiones RPAREN SEMIC
+    (56) lectura -> . READ LPAREN ID lec_aux RPAREN SEMIC
+    (59) escritura -> . WRITE LPAREN esc_aux RPAREN SEMIC
+    (65) decision -> . IF LPAREN expresiones RPAREN THEN bloque dec_aux
+    (69) loop_cond -> . WHILE LPAREN expresiones RPAREN DO bloque
+    (70) loop_no_cond -> . FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque
+    (73) expresiones -> . t_exp or_check
+    (99) empty -> .
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+
+  ! shift/reduce conflict for ID resolved as shift
+  ! shift/reduce conflict for RETURN resolved as shift
+  ! shift/reduce conflict for READ resolved as shift
+  ! shift/reduce conflict for WRITE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for FOR resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for INT_CTE resolved as shift
+  ! shift/reduce conflict for FLOAT_CTE resolved as shift
+    ID              shift and go to state 56
+    RETURN          shift and go to state 58
+    READ            shift and go to state 59
+    WRITE           shift and go to state 60
+    IF              shift and go to state 61
+    WHILE           shift and go to state 62
+    FOR             shift and go to state 63
+    RCURLY          reduce using rule 99 (empty -> .)
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+
+  ! ID              [ reduce using rule 99 (empty -> .) ]
+  ! RETURN          [ reduce using rule 99 (empty -> .) ]
+  ! READ            [ reduce using rule 99 (empty -> .) ]
+  ! WRITE           [ reduce using rule 99 (empty -> .) ]
+  ! IF              [ reduce using rule 99 (empty -> .) ]
+  ! WHILE           [ reduce using rule 99 (empty -> .) ]
+  ! FOR             [ reduce using rule 99 (empty -> .) ]
+  ! LPAREN          [ reduce using rule 99 (empty -> .) ]
+  ! INT_CTE         [ reduce using rule 99 (empty -> .) ]
+  ! FLOAT_CTE       [ reduce using rule 99 (empty -> .) ]
+
+    estatutos                      shift and go to state 44
+    asignacion                     shift and go to state 45
+    llamada_func                   shift and go to state 46
+    llamada_void                   shift and go to state 47
+    retorno                        shift and go to state 48
+    lectura                        shift and go to state 49
+    escritura                      shift and go to state 50
+    decision                       shift and go to state 51
+    loop_cond                      shift and go to state 52
+    loop_no_cond                   shift and go to state 53
+    expresiones                    shift and go to state 54
+    empty                          shift and go to state 55
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+
+state 35
+
+    (14) def_funciones -> FUNCTION tipos_func ID LPAREN parametros . RPAREN SEMIC dec_var_loc bloque
+
+    RPAREN          shift and go to state 71
+
+
+state 36
+
+    (26) parametros -> tipos . COLON ID param_aux
+
+    COLON           shift and go to state 72
+
+
+state 37
+
+    (4) dec_var_aux -> tipos . COLON lista_ids SEMIC dec_var_aux
+
+    COLON           shift and go to state 73
+
+
+state 38
+
+    (2) dec_var_gob -> VARS tipos COLON lista_ids SEMIC dec_var_aux .
+
+    FUNCTION        reduce using rule 2 (dec_var_gob -> VARS tipos COLON lista_ids SEMIC dec_var_aux .)
+    MAIN            reduce using rule 2 (dec_var_gob -> VARS tipos COLON lista_ids SEMIC dec_var_aux .)
+
+
+state 39
+
+    (5) dec_var_aux -> empty .
+
+    FUNCTION        reduce using rule 5 (dec_var_aux -> empty .)
+    MAIN            reduce using rule 5 (dec_var_aux -> empty .)
+
+
+state 40
+
+    (6) lista_ids -> ID lista_aux lista_aux_b .
+
+    SEMIC           reduce using rule 6 (lista_ids -> ID lista_aux lista_aux_b .)
+
+
+state 41
+
+    (9) lista_aux_b -> COMMA . lista_ids
+    (6) lista_ids -> . ID lista_aux lista_aux_b
+
+    ID              shift and go to state 26
+
+    lista_ids                      shift and go to state 74
+
+state 42
+
+    (10) lista_aux_b -> empty .
+
+    SEMIC           reduce using rule 10 (lista_aux_b -> empty .)
+
+
+state 43
+
+    (7) lista_aux -> LBRACK INT_CTE . RBRACK
+
+    RBRACK          shift and go to state 75
+
+
+state 44
+
+    (30) bloque -> LCURLY estatutos . estatu_rec RCURLY
+    (31) estatu_rec -> . estatutos estatu_rec
+    (32) estatu_rec -> . empty
+    (33) estatutos -> . asignacion
+    (34) estatutos -> . llamada_func
+    (35) estatutos -> . llamada_void
+    (36) estatutos -> . retorno
+    (37) estatutos -> . lectura
+    (38) estatutos -> . escritura
+    (39) estatutos -> . decision
+    (40) estatutos -> . loop_cond
+    (41) estatutos -> . loop_no_cond
+    (42) estatutos -> . expresiones
+    (43) estatutos -> . empty
+    (99) empty -> .
+    (44) asignacion -> . ID ASSIGN expresiones
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+    (50) llamada_void -> . ID LPAREN llamada_void_aux RPAREN SEMIC
+    (55) retorno -> . RETURN LPAREN expresiones RPAREN SEMIC
+    (56) lectura -> . READ LPAREN ID lec_aux RPAREN SEMIC
+    (59) escritura -> . WRITE LPAREN esc_aux RPAREN SEMIC
+    (65) decision -> . IF LPAREN expresiones RPAREN THEN bloque dec_aux
+    (69) loop_cond -> . WHILE LPAREN expresiones RPAREN DO bloque
+    (70) loop_no_cond -> . FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+
+  ! shift/reduce conflict for ID resolved as shift
+  ! shift/reduce conflict for RETURN resolved as shift
+  ! shift/reduce conflict for READ resolved as shift
+  ! shift/reduce conflict for WRITE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for FOR resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for INT_CTE resolved as shift
+  ! shift/reduce conflict for FLOAT_CTE resolved as shift
+    RCURLY          reduce using rule 99 (empty -> .)
+    ID              shift and go to state 56
+    RETURN          shift and go to state 58
+    READ            shift and go to state 59
+    WRITE           shift and go to state 60
+    IF              shift and go to state 61
+    WHILE           shift and go to state 62
+    FOR             shift and go to state 63
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+
+  ! ID              [ reduce using rule 99 (empty -> .) ]
+  ! RETURN          [ reduce using rule 99 (empty -> .) ]
+  ! READ            [ reduce using rule 99 (empty -> .) ]
+  ! WRITE           [ reduce using rule 99 (empty -> .) ]
+  ! IF              [ reduce using rule 99 (empty -> .) ]
+  ! WHILE           [ reduce using rule 99 (empty -> .) ]
+  ! FOR             [ reduce using rule 99 (empty -> .) ]
+  ! LPAREN          [ reduce using rule 99 (empty -> .) ]
+  ! INT_CTE         [ reduce using rule 99 (empty -> .) ]
+  ! FLOAT_CTE       [ reduce using rule 99 (empty -> .) ]
+
+    estatutos                      shift and go to state 76
+    estatu_rec                     shift and go to state 77
+    empty                          shift and go to state 78
+    asignacion                     shift and go to state 45
+    llamada_func                   shift and go to state 46
+    llamada_void                   shift and go to state 47
+    retorno                        shift and go to state 48
+    lectura                        shift and go to state 49
+    escritura                      shift and go to state 50
+    decision                       shift and go to state 51
+    loop_cond                      shift and go to state 52
+    loop_no_cond                   shift and go to state 53
+    expresiones                    shift and go to state 54
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+
+state 45
+
+    (33) estatutos -> asignacion .
+
+    ID              reduce using rule 33 (estatutos -> asignacion .)
+    RETURN          reduce using rule 33 (estatutos -> asignacion .)
+    READ            reduce using rule 33 (estatutos -> asignacion .)
+    WRITE           reduce using rule 33 (estatutos -> asignacion .)
+    IF              reduce using rule 33 (estatutos -> asignacion .)
+    WHILE           reduce using rule 33 (estatutos -> asignacion .)
+    FOR             reduce using rule 33 (estatutos -> asignacion .)
+    LPAREN          reduce using rule 33 (estatutos -> asignacion .)
+    INT_CTE         reduce using rule 33 (estatutos -> asignacion .)
+    FLOAT_CTE       reduce using rule 33 (estatutos -> asignacion .)
+    RCURLY          reduce using rule 33 (estatutos -> asignacion .)
+
+
+state 46
+
+    (34) estatutos -> llamada_func .
+    (98) factor -> llamada_func .
+
+  ! reduce/reduce conflict for ID resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for RETURN resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for READ resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for WRITE resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for IF resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for WHILE resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for FOR resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for LPAREN resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for INT_CTE resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for FLOAT_CTE resolved using rule 34 (estatutos -> llamada_func .)
+  ! reduce/reduce conflict for RCURLY resolved using rule 34 (estatutos -> llamada_func .)
+    ID              reduce using rule 34 (estatutos -> llamada_func .)
+    RETURN          reduce using rule 34 (estatutos -> llamada_func .)
+    READ            reduce using rule 34 (estatutos -> llamada_func .)
+    WRITE           reduce using rule 34 (estatutos -> llamada_func .)
+    IF              reduce using rule 34 (estatutos -> llamada_func .)
+    WHILE           reduce using rule 34 (estatutos -> llamada_func .)
+    FOR             reduce using rule 34 (estatutos -> llamada_func .)
+    LPAREN          reduce using rule 34 (estatutos -> llamada_func .)
+    INT_CTE         reduce using rule 34 (estatutos -> llamada_func .)
+    FLOAT_CTE       reduce using rule 34 (estatutos -> llamada_func .)
+    RCURLY          reduce using rule 34 (estatutos -> llamada_func .)
+    MULT_OP         reduce using rule 98 (factor -> llamada_func .)
+    DIV_OP          reduce using rule 98 (factor -> llamada_func .)
+    PLUS_OP         reduce using rule 98 (factor -> llamada_func .)
+    MINUS_OP        reduce using rule 98 (factor -> llamada_func .)
+    GT_LOG          reduce using rule 98 (factor -> llamada_func .)
+    LT_LOG          reduce using rule 98 (factor -> llamada_func .)
+    EQUAL_LOG       reduce using rule 98 (factor -> llamada_func .)
+    NE_LOG          reduce using rule 98 (factor -> llamada_func .)
+    AND_LOG         reduce using rule 98 (factor -> llamada_func .)
+    OR_LOG          reduce using rule 98 (factor -> llamada_func .)
+
+  ! ID              [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! RETURN          [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! READ            [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! WRITE           [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! IF              [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! WHILE           [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! FOR             [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! LPAREN          [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! INT_CTE         [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! FLOAT_CTE       [ reduce using rule 98 (factor -> llamada_func .) ]
+  ! RCURLY          [ reduce using rule 98 (factor -> llamada_func .) ]
+
+
+state 47
+
+    (35) estatutos -> llamada_void .
+
+    ID              reduce using rule 35 (estatutos -> llamada_void .)
+    RETURN          reduce using rule 35 (estatutos -> llamada_void .)
+    READ            reduce using rule 35 (estatutos -> llamada_void .)
+    WRITE           reduce using rule 35 (estatutos -> llamada_void .)
+    IF              reduce using rule 35 (estatutos -> llamada_void .)
+    WHILE           reduce using rule 35 (estatutos -> llamada_void .)
+    FOR             reduce using rule 35 (estatutos -> llamada_void .)
+    LPAREN          reduce using rule 35 (estatutos -> llamada_void .)
+    INT_CTE         reduce using rule 35 (estatutos -> llamada_void .)
+    FLOAT_CTE       reduce using rule 35 (estatutos -> llamada_void .)
+    RCURLY          reduce using rule 35 (estatutos -> llamada_void .)
+
+
+state 48
+
+    (36) estatutos -> retorno .
+
+    ID              reduce using rule 36 (estatutos -> retorno .)
+    RETURN          reduce using rule 36 (estatutos -> retorno .)
+    READ            reduce using rule 36 (estatutos -> retorno .)
+    WRITE           reduce using rule 36 (estatutos -> retorno .)
+    IF              reduce using rule 36 (estatutos -> retorno .)
+    WHILE           reduce using rule 36 (estatutos -> retorno .)
+    FOR             reduce using rule 36 (estatutos -> retorno .)
+    LPAREN          reduce using rule 36 (estatutos -> retorno .)
+    INT_CTE         reduce using rule 36 (estatutos -> retorno .)
+    FLOAT_CTE       reduce using rule 36 (estatutos -> retorno .)
+    RCURLY          reduce using rule 36 (estatutos -> retorno .)
+
+
+state 49
+
+    (37) estatutos -> lectura .
+
+    ID              reduce using rule 37 (estatutos -> lectura .)
+    RETURN          reduce using rule 37 (estatutos -> lectura .)
+    READ            reduce using rule 37 (estatutos -> lectura .)
+    WRITE           reduce using rule 37 (estatutos -> lectura .)
+    IF              reduce using rule 37 (estatutos -> lectura .)
+    WHILE           reduce using rule 37 (estatutos -> lectura .)
+    FOR             reduce using rule 37 (estatutos -> lectura .)
+    LPAREN          reduce using rule 37 (estatutos -> lectura .)
+    INT_CTE         reduce using rule 37 (estatutos -> lectura .)
+    FLOAT_CTE       reduce using rule 37 (estatutos -> lectura .)
+    RCURLY          reduce using rule 37 (estatutos -> lectura .)
+
+
+state 50
+
+    (38) estatutos -> escritura .
+
+    ID              reduce using rule 38 (estatutos -> escritura .)
+    RETURN          reduce using rule 38 (estatutos -> escritura .)
+    READ            reduce using rule 38 (estatutos -> escritura .)
+    WRITE           reduce using rule 38 (estatutos -> escritura .)
+    IF              reduce using rule 38 (estatutos -> escritura .)
+    WHILE           reduce using rule 38 (estatutos -> escritura .)
+    FOR             reduce using rule 38 (estatutos -> escritura .)
+    LPAREN          reduce using rule 38 (estatutos -> escritura .)
+    INT_CTE         reduce using rule 38 (estatutos -> escritura .)
+    FLOAT_CTE       reduce using rule 38 (estatutos -> escritura .)
+    RCURLY          reduce using rule 38 (estatutos -> escritura .)
+
+
+state 51
+
+    (39) estatutos -> decision .
+
+    ID              reduce using rule 39 (estatutos -> decision .)
+    RETURN          reduce using rule 39 (estatutos -> decision .)
+    READ            reduce using rule 39 (estatutos -> decision .)
+    WRITE           reduce using rule 39 (estatutos -> decision .)
+    IF              reduce using rule 39 (estatutos -> decision .)
+    WHILE           reduce using rule 39 (estatutos -> decision .)
+    FOR             reduce using rule 39 (estatutos -> decision .)
+    LPAREN          reduce using rule 39 (estatutos -> decision .)
+    INT_CTE         reduce using rule 39 (estatutos -> decision .)
+    FLOAT_CTE       reduce using rule 39 (estatutos -> decision .)
+    RCURLY          reduce using rule 39 (estatutos -> decision .)
+
+
+state 52
+
+    (40) estatutos -> loop_cond .
+
+    ID              reduce using rule 40 (estatutos -> loop_cond .)
+    RETURN          reduce using rule 40 (estatutos -> loop_cond .)
+    READ            reduce using rule 40 (estatutos -> loop_cond .)
+    WRITE           reduce using rule 40 (estatutos -> loop_cond .)
+    IF              reduce using rule 40 (estatutos -> loop_cond .)
+    WHILE           reduce using rule 40 (estatutos -> loop_cond .)
+    FOR             reduce using rule 40 (estatutos -> loop_cond .)
+    LPAREN          reduce using rule 40 (estatutos -> loop_cond .)
+    INT_CTE         reduce using rule 40 (estatutos -> loop_cond .)
+    FLOAT_CTE       reduce using rule 40 (estatutos -> loop_cond .)
+    RCURLY          reduce using rule 40 (estatutos -> loop_cond .)
+
+
+state 53
+
+    (41) estatutos -> loop_no_cond .
+
+    ID              reduce using rule 41 (estatutos -> loop_no_cond .)
+    RETURN          reduce using rule 41 (estatutos -> loop_no_cond .)
+    READ            reduce using rule 41 (estatutos -> loop_no_cond .)
+    WRITE           reduce using rule 41 (estatutos -> loop_no_cond .)
+    IF              reduce using rule 41 (estatutos -> loop_no_cond .)
+    WHILE           reduce using rule 41 (estatutos -> loop_no_cond .)
+    FOR             reduce using rule 41 (estatutos -> loop_no_cond .)
+    LPAREN          reduce using rule 41 (estatutos -> loop_no_cond .)
+    INT_CTE         reduce using rule 41 (estatutos -> loop_no_cond .)
+    FLOAT_CTE       reduce using rule 41 (estatutos -> loop_no_cond .)
+    RCURLY          reduce using rule 41 (estatutos -> loop_no_cond .)
+
+
+state 54
+
+    (42) estatutos -> expresiones .
+
+    ID              reduce using rule 42 (estatutos -> expresiones .)
+    RETURN          reduce using rule 42 (estatutos -> expresiones .)
+    READ            reduce using rule 42 (estatutos -> expresiones .)
+    WRITE           reduce using rule 42 (estatutos -> expresiones .)
+    IF              reduce using rule 42 (estatutos -> expresiones .)
+    WHILE           reduce using rule 42 (estatutos -> expresiones .)
+    FOR             reduce using rule 42 (estatutos -> expresiones .)
+    LPAREN          reduce using rule 42 (estatutos -> expresiones .)
+    INT_CTE         reduce using rule 42 (estatutos -> expresiones .)
+    FLOAT_CTE       reduce using rule 42 (estatutos -> expresiones .)
+    RCURLY          reduce using rule 42 (estatutos -> expresiones .)
+
+
+state 55
+
+    (43) estatutos -> empty .
+
+    ID              reduce using rule 43 (estatutos -> empty .)
+    RETURN          reduce using rule 43 (estatutos -> empty .)
+    READ            reduce using rule 43 (estatutos -> empty .)
+    WRITE           reduce using rule 43 (estatutos -> empty .)
+    IF              reduce using rule 43 (estatutos -> empty .)
+    WHILE           reduce using rule 43 (estatutos -> empty .)
+    FOR             reduce using rule 43 (estatutos -> empty .)
+    LPAREN          reduce using rule 43 (estatutos -> empty .)
+    INT_CTE         reduce using rule 43 (estatutos -> empty .)
+    FLOAT_CTE       reduce using rule 43 (estatutos -> empty .)
+    RCURLY          reduce using rule 43 (estatutos -> empty .)
+
+
+state 56
+
+    (44) asignacion -> ID . ASSIGN expresiones
+    (45) llamada_func -> ID . LPAREN llamada_func_aux RPAREN SEMIC
+    (50) llamada_void -> ID . LPAREN llamada_void_aux RPAREN SEMIC
+    (97) factor -> ID .
+
+  ! shift/reduce conflict for LPAREN resolved as shift
+    ASSIGN          shift and go to state 79
+    LPAREN          shift and go to state 80
+    MULT_OP         reduce using rule 97 (factor -> ID .)
+    DIV_OP          reduce using rule 97 (factor -> ID .)
+    PLUS_OP         reduce using rule 97 (factor -> ID .)
+    MINUS_OP        reduce using rule 97 (factor -> ID .)
+    GT_LOG          reduce using rule 97 (factor -> ID .)
+    LT_LOG          reduce using rule 97 (factor -> ID .)
+    EQUAL_LOG       reduce using rule 97 (factor -> ID .)
+    NE_LOG          reduce using rule 97 (factor -> ID .)
+    AND_LOG         reduce using rule 97 (factor -> ID .)
+    OR_LOG          reduce using rule 97 (factor -> ID .)
+    ID              reduce using rule 97 (factor -> ID .)
+    RETURN          reduce using rule 97 (factor -> ID .)
+    READ            reduce using rule 97 (factor -> ID .)
+    WRITE           reduce using rule 97 (factor -> ID .)
+    IF              reduce using rule 97 (factor -> ID .)
+    WHILE           reduce using rule 97 (factor -> ID .)
+    FOR             reduce using rule 97 (factor -> ID .)
+    INT_CTE         reduce using rule 97 (factor -> ID .)
+    FLOAT_CTE       reduce using rule 97 (factor -> ID .)
+    RCURLY          reduce using rule 97 (factor -> ID .)
+
+  ! LPAREN          [ reduce using rule 97 (factor -> ID .) ]
+
+
+state 57
+
+    (94) factor -> LPAREN . expresiones RPAREN
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 81
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 58
+
+    (55) retorno -> RETURN . LPAREN expresiones RPAREN SEMIC
+
+    LPAREN          shift and go to state 84
+
+
+state 59
+
+    (56) lectura -> READ . LPAREN ID lec_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 85
+
+
+state 60
+
+    (59) escritura -> WRITE . LPAREN esc_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 86
+
+
+state 61
+
+    (65) decision -> IF . LPAREN expresiones RPAREN THEN bloque dec_aux
+
+    LPAREN          shift and go to state 87
+
+
+state 62
+
+    (69) loop_cond -> WHILE . LPAREN expresiones RPAREN DO bloque
+
+    LPAREN          shift and go to state 88
+
+
+state 63
+
+    (70) loop_no_cond -> FOR . ID nocond_aux ASSIGN expresiones TO expresiones DO bloque
+
+    ID              shift and go to state 89
+
+
+state 64
+
+    (73) expresiones -> t_exp . or_check
+    (74) or_check -> . OR_LOG expresiones
+    (75) or_check -> . empty
+    (99) empty -> .
+
+    OR_LOG          shift and go to state 91
+    ID              reduce using rule 99 (empty -> .)
+    RETURN          reduce using rule 99 (empty -> .)
+    READ            reduce using rule 99 (empty -> .)
+    WRITE           reduce using rule 99 (empty -> .)
+    IF              reduce using rule 99 (empty -> .)
+    WHILE           reduce using rule 99 (empty -> .)
+    FOR             reduce using rule 99 (empty -> .)
+    LPAREN          reduce using rule 99 (empty -> .)
+    INT_CTE         reduce using rule 99 (empty -> .)
+    FLOAT_CTE       reduce using rule 99 (empty -> .)
+    RCURLY          reduce using rule 99 (empty -> .)
+    RPAREN          reduce using rule 99 (empty -> .)
+    COMMA           reduce using rule 99 (empty -> .)
+    RBRACK          reduce using rule 99 (empty -> .)
+    TO              reduce using rule 99 (empty -> .)
+    DO              reduce using rule 99 (empty -> .)
+
+    or_check                       shift and go to state 90
+    empty                          shift and go to state 92
+
+state 65
+
+    (76) t_exp -> g_exp . and_check
+    (77) and_check -> . AND_LOG t_exp
+    (78) and_check -> . empty
+    (99) empty -> .
+
+    AND_LOG         shift and go to state 94
+    OR_LOG          reduce using rule 99 (empty -> .)
+    ID              reduce using rule 99 (empty -> .)
+    RETURN          reduce using rule 99 (empty -> .)
+    READ            reduce using rule 99 (empty -> .)
+    WRITE           reduce using rule 99 (empty -> .)
+    IF              reduce using rule 99 (empty -> .)
+    WHILE           reduce using rule 99 (empty -> .)
+    FOR             reduce using rule 99 (empty -> .)
+    LPAREN          reduce using rule 99 (empty -> .)
+    INT_CTE         reduce using rule 99 (empty -> .)
+    FLOAT_CTE       reduce using rule 99 (empty -> .)
+    RCURLY          reduce using rule 99 (empty -> .)
+    RPAREN          reduce using rule 99 (empty -> .)
+    COMMA           reduce using rule 99 (empty -> .)
+    RBRACK          reduce using rule 99 (empty -> .)
+    TO              reduce using rule 99 (empty -> .)
+    DO              reduce using rule 99 (empty -> .)
+
+    and_check                      shift and go to state 93
+    empty                          shift and go to state 95
+
+state 66
+
+    (79) g_exp -> m_exp . op_check
+    (80) op_check -> . empty
+    (81) op_check -> . comparacion m_exp
+    (99) empty -> .
+    (82) comparacion -> . GT_LOG
+    (83) comparacion -> . LT_LOG
+    (84) comparacion -> . EQUAL_LOG
+    (85) comparacion -> . NE_LOG
+
+    AND_LOG         reduce using rule 99 (empty -> .)
+    OR_LOG          reduce using rule 99 (empty -> .)
+    ID              reduce using rule 99 (empty -> .)
+    RETURN          reduce using rule 99 (empty -> .)
+    READ            reduce using rule 99 (empty -> .)
+    WRITE           reduce using rule 99 (empty -> .)
+    IF              reduce using rule 99 (empty -> .)
+    WHILE           reduce using rule 99 (empty -> .)
+    FOR             reduce using rule 99 (empty -> .)
+    LPAREN          reduce using rule 99 (empty -> .)
+    INT_CTE         reduce using rule 99 (empty -> .)
+    FLOAT_CTE       reduce using rule 99 (empty -> .)
+    RCURLY          reduce using rule 99 (empty -> .)
+    RPAREN          reduce using rule 99 (empty -> .)
+    COMMA           reduce using rule 99 (empty -> .)
+    RBRACK          reduce using rule 99 (empty -> .)
+    TO              reduce using rule 99 (empty -> .)
+    DO              reduce using rule 99 (empty -> .)
+    GT_LOG          shift and go to state 99
+    LT_LOG          shift and go to state 100
+    EQUAL_LOG       shift and go to state 101
+    NE_LOG          shift and go to state 102
+
+    op_check                       shift and go to state 96
+    empty                          shift and go to state 97
+    comparacion                    shift and go to state 98
+
+state 67
+
+    (86) m_exp -> termino . m_rec
+    (87) m_rec -> . PLUS_OP m_exp
+    (88) m_rec -> . MINUS_OP m_exp
+    (89) m_rec -> . empty
+    (99) empty -> .
+
+    PLUS_OP         shift and go to state 104
+    MINUS_OP        shift and go to state 105
+    GT_LOG          reduce using rule 99 (empty -> .)
+    LT_LOG          reduce using rule 99 (empty -> .)
+    EQUAL_LOG       reduce using rule 99 (empty -> .)
+    NE_LOG          reduce using rule 99 (empty -> .)
+    AND_LOG         reduce using rule 99 (empty -> .)
+    OR_LOG          reduce using rule 99 (empty -> .)
+    ID              reduce using rule 99 (empty -> .)
+    RETURN          reduce using rule 99 (empty -> .)
+    READ            reduce using rule 99 (empty -> .)
+    WRITE           reduce using rule 99 (empty -> .)
+    IF              reduce using rule 99 (empty -> .)
+    WHILE           reduce using rule 99 (empty -> .)
+    FOR             reduce using rule 99 (empty -> .)
+    LPAREN          reduce using rule 99 (empty -> .)
+    INT_CTE         reduce using rule 99 (empty -> .)
+    FLOAT_CTE       reduce using rule 99 (empty -> .)
+    RCURLY          reduce using rule 99 (empty -> .)
+    RPAREN          reduce using rule 99 (empty -> .)
+    COMMA           reduce using rule 99 (empty -> .)
+    RBRACK          reduce using rule 99 (empty -> .)
+    TO              reduce using rule 99 (empty -> .)
+    DO              reduce using rule 99 (empty -> .)
+
+    m_rec                          shift and go to state 103
+    empty                          shift and go to state 106
+
+state 68
+
+    (90) termino -> factor . term_rec
+    (91) term_rec -> . MULT_OP termino
+    (92) term_rec -> . DIV_OP termino
+    (93) term_rec -> . empty
+    (99) empty -> .
+
+    MULT_OP         shift and go to state 108
+    DIV_OP          shift and go to state 109
+    PLUS_OP         reduce using rule 99 (empty -> .)
+    MINUS_OP        reduce using rule 99 (empty -> .)
+    GT_LOG          reduce using rule 99 (empty -> .)
+    LT_LOG          reduce using rule 99 (empty -> .)
+    EQUAL_LOG       reduce using rule 99 (empty -> .)
+    NE_LOG          reduce using rule 99 (empty -> .)
+    AND_LOG         reduce using rule 99 (empty -> .)
+    OR_LOG          reduce using rule 99 (empty -> .)
+    ID              reduce using rule 99 (empty -> .)
+    RETURN          reduce using rule 99 (empty -> .)
+    READ            reduce using rule 99 (empty -> .)
+    WRITE           reduce using rule 99 (empty -> .)
+    IF              reduce using rule 99 (empty -> .)
+    WHILE           reduce using rule 99 (empty -> .)
+    FOR             reduce using rule 99 (empty -> .)
+    LPAREN          reduce using rule 99 (empty -> .)
+    INT_CTE         reduce using rule 99 (empty -> .)
+    FLOAT_CTE       reduce using rule 99 (empty -> .)
+    RCURLY          reduce using rule 99 (empty -> .)
+    RPAREN          reduce using rule 99 (empty -> .)
+    COMMA           reduce using rule 99 (empty -> .)
+    RBRACK          reduce using rule 99 (empty -> .)
+    TO              reduce using rule 99 (empty -> .)
+    DO              reduce using rule 99 (empty -> .)
+
+    term_rec                       shift and go to state 107
+    empty                          shift and go to state 110
+
+state 69
+
+    (95) factor -> INT_CTE .
+
+    MULT_OP         reduce using rule 95 (factor -> INT_CTE .)
+    DIV_OP          reduce using rule 95 (factor -> INT_CTE .)
+    PLUS_OP         reduce using rule 95 (factor -> INT_CTE .)
+    MINUS_OP        reduce using rule 95 (factor -> INT_CTE .)
+    GT_LOG          reduce using rule 95 (factor -> INT_CTE .)
+    LT_LOG          reduce using rule 95 (factor -> INT_CTE .)
+    EQUAL_LOG       reduce using rule 95 (factor -> INT_CTE .)
+    NE_LOG          reduce using rule 95 (factor -> INT_CTE .)
+    AND_LOG         reduce using rule 95 (factor -> INT_CTE .)
+    OR_LOG          reduce using rule 95 (factor -> INT_CTE .)
+    ID              reduce using rule 95 (factor -> INT_CTE .)
+    RETURN          reduce using rule 95 (factor -> INT_CTE .)
+    READ            reduce using rule 95 (factor -> INT_CTE .)
+    WRITE           reduce using rule 95 (factor -> INT_CTE .)
+    IF              reduce using rule 95 (factor -> INT_CTE .)
+    WHILE           reduce using rule 95 (factor -> INT_CTE .)
+    FOR             reduce using rule 95 (factor -> INT_CTE .)
+    LPAREN          reduce using rule 95 (factor -> INT_CTE .)
+    INT_CTE         reduce using rule 95 (factor -> INT_CTE .)
+    FLOAT_CTE       reduce using rule 95 (factor -> INT_CTE .)
+    RCURLY          reduce using rule 95 (factor -> INT_CTE .)
+    RPAREN          reduce using rule 95 (factor -> INT_CTE .)
+    COMMA           reduce using rule 95 (factor -> INT_CTE .)
+    RBRACK          reduce using rule 95 (factor -> INT_CTE .)
+    TO              reduce using rule 95 (factor -> INT_CTE .)
+    DO              reduce using rule 95 (factor -> INT_CTE .)
+
+
+state 70
+
+    (96) factor -> FLOAT_CTE .
+
+    MULT_OP         reduce using rule 96 (factor -> FLOAT_CTE .)
+    DIV_OP          reduce using rule 96 (factor -> FLOAT_CTE .)
+    PLUS_OP         reduce using rule 96 (factor -> FLOAT_CTE .)
+    MINUS_OP        reduce using rule 96 (factor -> FLOAT_CTE .)
+    GT_LOG          reduce using rule 96 (factor -> FLOAT_CTE .)
+    LT_LOG          reduce using rule 96 (factor -> FLOAT_CTE .)
+    EQUAL_LOG       reduce using rule 96 (factor -> FLOAT_CTE .)
+    NE_LOG          reduce using rule 96 (factor -> FLOAT_CTE .)
+    AND_LOG         reduce using rule 96 (factor -> FLOAT_CTE .)
+    OR_LOG          reduce using rule 96 (factor -> FLOAT_CTE .)
+    ID              reduce using rule 96 (factor -> FLOAT_CTE .)
+    RETURN          reduce using rule 96 (factor -> FLOAT_CTE .)
+    READ            reduce using rule 96 (factor -> FLOAT_CTE .)
+    WRITE           reduce using rule 96 (factor -> FLOAT_CTE .)
+    IF              reduce using rule 96 (factor -> FLOAT_CTE .)
+    WHILE           reduce using rule 96 (factor -> FLOAT_CTE .)
+    FOR             reduce using rule 96 (factor -> FLOAT_CTE .)
+    LPAREN          reduce using rule 96 (factor -> FLOAT_CTE .)
+    INT_CTE         reduce using rule 96 (factor -> FLOAT_CTE .)
+    FLOAT_CTE       reduce using rule 96 (factor -> FLOAT_CTE .)
+    RCURLY          reduce using rule 96 (factor -> FLOAT_CTE .)
+    RPAREN          reduce using rule 96 (factor -> FLOAT_CTE .)
+    COMMA           reduce using rule 96 (factor -> FLOAT_CTE .)
+    RBRACK          reduce using rule 96 (factor -> FLOAT_CTE .)
+    TO              reduce using rule 96 (factor -> FLOAT_CTE .)
+    DO              reduce using rule 96 (factor -> FLOAT_CTE .)
+
+
+state 71
+
+    (14) def_funciones -> FUNCTION tipos_func ID LPAREN parametros RPAREN . SEMIC dec_var_loc bloque
+
+    SEMIC           shift and go to state 111
+
+
+state 72
+
+    (26) parametros -> tipos COLON . ID param_aux
+
+    ID              shift and go to state 112
+
+
+state 73
+
+    (4) dec_var_aux -> tipos COLON . lista_ids SEMIC dec_var_aux
+    (6) lista_ids -> . ID lista_aux lista_aux_b
+
+    ID              shift and go to state 26
+
+    lista_ids                      shift and go to state 113
+
+state 74
+
+    (9) lista_aux_b -> COMMA lista_ids .
+
+    SEMIC           reduce using rule 9 (lista_aux_b -> COMMA lista_ids .)
+
+
+state 75
+
+    (7) lista_aux -> LBRACK INT_CTE RBRACK .
+
+    COMMA           reduce using rule 7 (lista_aux -> LBRACK INT_CTE RBRACK .)
+    SEMIC           reduce using rule 7 (lista_aux -> LBRACK INT_CTE RBRACK .)
+
+
+state 76
+
+    (31) estatu_rec -> estatutos . estatu_rec
+    (31) estatu_rec -> . estatutos estatu_rec
+    (32) estatu_rec -> . empty
+    (33) estatutos -> . asignacion
+    (34) estatutos -> . llamada_func
+    (35) estatutos -> . llamada_void
+    (36) estatutos -> . retorno
+    (37) estatutos -> . lectura
+    (38) estatutos -> . escritura
+    (39) estatutos -> . decision
+    (40) estatutos -> . loop_cond
+    (41) estatutos -> . loop_no_cond
+    (42) estatutos -> . expresiones
+    (43) estatutos -> . empty
+    (99) empty -> .
+    (44) asignacion -> . ID ASSIGN expresiones
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+    (50) llamada_void -> . ID LPAREN llamada_void_aux RPAREN SEMIC
+    (55) retorno -> . RETURN LPAREN expresiones RPAREN SEMIC
+    (56) lectura -> . READ LPAREN ID lec_aux RPAREN SEMIC
+    (59) escritura -> . WRITE LPAREN esc_aux RPAREN SEMIC
+    (65) decision -> . IF LPAREN expresiones RPAREN THEN bloque dec_aux
+    (69) loop_cond -> . WHILE LPAREN expresiones RPAREN DO bloque
+    (70) loop_no_cond -> . FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+
+  ! shift/reduce conflict for ID resolved as shift
+  ! shift/reduce conflict for RETURN resolved as shift
+  ! shift/reduce conflict for READ resolved as shift
+  ! shift/reduce conflict for WRITE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for FOR resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for INT_CTE resolved as shift
+  ! shift/reduce conflict for FLOAT_CTE resolved as shift
+    RCURLY          reduce using rule 99 (empty -> .)
+    ID              shift and go to state 56
+    RETURN          shift and go to state 58
+    READ            shift and go to state 59
+    WRITE           shift and go to state 60
+    IF              shift and go to state 61
+    WHILE           shift and go to state 62
+    FOR             shift and go to state 63
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+
+  ! ID              [ reduce using rule 99 (empty -> .) ]
+  ! RETURN          [ reduce using rule 99 (empty -> .) ]
+  ! READ            [ reduce using rule 99 (empty -> .) ]
+  ! WRITE           [ reduce using rule 99 (empty -> .) ]
+  ! IF              [ reduce using rule 99 (empty -> .) ]
+  ! WHILE           [ reduce using rule 99 (empty -> .) ]
+  ! FOR             [ reduce using rule 99 (empty -> .) ]
+  ! LPAREN          [ reduce using rule 99 (empty -> .) ]
+  ! INT_CTE         [ reduce using rule 99 (empty -> .) ]
+  ! FLOAT_CTE       [ reduce using rule 99 (empty -> .) ]
+
+    estatutos                      shift and go to state 76
+    estatu_rec                     shift and go to state 114
+    empty                          shift and go to state 78
+    asignacion                     shift and go to state 45
+    llamada_func                   shift and go to state 46
+    llamada_void                   shift and go to state 47
+    retorno                        shift and go to state 48
+    lectura                        shift and go to state 49
+    escritura                      shift and go to state 50
+    decision                       shift and go to state 51
+    loop_cond                      shift and go to state 52
+    loop_no_cond                   shift and go to state 53
+    expresiones                    shift and go to state 54
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+
+state 77
+
+    (30) bloque -> LCURLY estatutos estatu_rec . RCURLY
+
+    RCURLY          shift and go to state 115
+
+
+state 78
+
+    (32) estatu_rec -> empty .
+    (43) estatutos -> empty .
+
+  ! reduce/reduce conflict for RCURLY resolved using rule 32 (estatu_rec -> empty .)
+    RCURLY          reduce using rule 32 (estatu_rec -> empty .)
+    ID              reduce using rule 43 (estatutos -> empty .)
+    RETURN          reduce using rule 43 (estatutos -> empty .)
+    READ            reduce using rule 43 (estatutos -> empty .)
+    WRITE           reduce using rule 43 (estatutos -> empty .)
+    IF              reduce using rule 43 (estatutos -> empty .)
+    WHILE           reduce using rule 43 (estatutos -> empty .)
+    FOR             reduce using rule 43 (estatutos -> empty .)
+    LPAREN          reduce using rule 43 (estatutos -> empty .)
+    INT_CTE         reduce using rule 43 (estatutos -> empty .)
+    FLOAT_CTE       reduce using rule 43 (estatutos -> empty .)
+
+  ! RCURLY          [ reduce using rule 43 (estatutos -> empty .) ]
+
+
+state 79
+
+    (44) asignacion -> ID ASSIGN . expresiones
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 116
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 80
+
+    (45) llamada_func -> ID LPAREN . llamada_func_aux RPAREN SEMIC
+    (50) llamada_void -> ID LPAREN . llamada_void_aux RPAREN SEMIC
+    (46) llamada_func_aux -> . ID llama_func_auxb
+    (47) llamada_func_aux -> . empty
+    (51) llamada_void_aux -> . ID llama_void_auxb
+    (52) llamada_void_aux -> . empty
+    (99) empty -> .
+
+    ID              shift and go to state 117
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    llamada_func_aux               shift and go to state 118
+    llamada_void_aux               shift and go to state 119
+    empty                          shift and go to state 120
+
+state 81
+
+    (94) factor -> LPAREN expresiones . RPAREN
+
+    RPAREN          shift and go to state 121
+
+
+state 82
+
+    (97) factor -> ID .
+    (45) llamada_func -> ID . LPAREN llamada_func_aux RPAREN SEMIC
+
+  ! shift/reduce conflict for LPAREN resolved as shift
+    MULT_OP         reduce using rule 97 (factor -> ID .)
+    DIV_OP          reduce using rule 97 (factor -> ID .)
+    PLUS_OP         reduce using rule 97 (factor -> ID .)
+    MINUS_OP        reduce using rule 97 (factor -> ID .)
+    GT_LOG          reduce using rule 97 (factor -> ID .)
+    LT_LOG          reduce using rule 97 (factor -> ID .)
+    EQUAL_LOG       reduce using rule 97 (factor -> ID .)
+    NE_LOG          reduce using rule 97 (factor -> ID .)
+    AND_LOG         reduce using rule 97 (factor -> ID .)
+    OR_LOG          reduce using rule 97 (factor -> ID .)
+    RPAREN          reduce using rule 97 (factor -> ID .)
+    ID              reduce using rule 97 (factor -> ID .)
+    RETURN          reduce using rule 97 (factor -> ID .)
+    READ            reduce using rule 97 (factor -> ID .)
+    WRITE           reduce using rule 97 (factor -> ID .)
+    IF              reduce using rule 97 (factor -> ID .)
+    WHILE           reduce using rule 97 (factor -> ID .)
+    FOR             reduce using rule 97 (factor -> ID .)
+    INT_CTE         reduce using rule 97 (factor -> ID .)
+    FLOAT_CTE       reduce using rule 97 (factor -> ID .)
+    RCURLY          reduce using rule 97 (factor -> ID .)
+    COMMA           reduce using rule 97 (factor -> ID .)
+    RBRACK          reduce using rule 97 (factor -> ID .)
+    TO              reduce using rule 97 (factor -> ID .)
+    DO              reduce using rule 97 (factor -> ID .)
+    LPAREN          shift and go to state 122
+
+  ! LPAREN          [ reduce using rule 97 (factor -> ID .) ]
+
+
+state 83
+
+    (98) factor -> llamada_func .
+
+    MULT_OP         reduce using rule 98 (factor -> llamada_func .)
+    DIV_OP          reduce using rule 98 (factor -> llamada_func .)
+    PLUS_OP         reduce using rule 98 (factor -> llamada_func .)
+    MINUS_OP        reduce using rule 98 (factor -> llamada_func .)
+    GT_LOG          reduce using rule 98 (factor -> llamada_func .)
+    LT_LOG          reduce using rule 98 (factor -> llamada_func .)
+    EQUAL_LOG       reduce using rule 98 (factor -> llamada_func .)
+    NE_LOG          reduce using rule 98 (factor -> llamada_func .)
+    AND_LOG         reduce using rule 98 (factor -> llamada_func .)
+    OR_LOG          reduce using rule 98 (factor -> llamada_func .)
+    RPAREN          reduce using rule 98 (factor -> llamada_func .)
+    ID              reduce using rule 98 (factor -> llamada_func .)
+    RETURN          reduce using rule 98 (factor -> llamada_func .)
+    READ            reduce using rule 98 (factor -> llamada_func .)
+    WRITE           reduce using rule 98 (factor -> llamada_func .)
+    IF              reduce using rule 98 (factor -> llamada_func .)
+    WHILE           reduce using rule 98 (factor -> llamada_func .)
+    FOR             reduce using rule 98 (factor -> llamada_func .)
+    LPAREN          reduce using rule 98 (factor -> llamada_func .)
+    INT_CTE         reduce using rule 98 (factor -> llamada_func .)
+    FLOAT_CTE       reduce using rule 98 (factor -> llamada_func .)
+    RCURLY          reduce using rule 98 (factor -> llamada_func .)
+    COMMA           reduce using rule 98 (factor -> llamada_func .)
+    RBRACK          reduce using rule 98 (factor -> llamada_func .)
+    TO              reduce using rule 98 (factor -> llamada_func .)
+    DO              reduce using rule 98 (factor -> llamada_func .)
+
+
+state 84
+
+    (55) retorno -> RETURN LPAREN . expresiones RPAREN SEMIC
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 123
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 85
+
+    (56) lectura -> READ LPAREN . ID lec_aux RPAREN SEMIC
+
+    ID              shift and go to state 124
+
+
+state 86
+
+    (59) escritura -> WRITE LPAREN . esc_aux RPAREN SEMIC
+    (60) esc_aux -> . STRING_CTE esc_rec
+    (61) esc_aux -> . expresiones esc_rec
+    (62) esc_aux -> . empty
+    (73) expresiones -> . t_exp or_check
+    (99) empty -> .
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    STRING_CTE      shift and go to state 126
+    RPAREN          reduce using rule 99 (empty -> .)
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    esc_aux                        shift and go to state 125
+    expresiones                    shift and go to state 127
+    empty                          shift and go to state 128
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 87
+
+    (65) decision -> IF LPAREN . expresiones RPAREN THEN bloque dec_aux
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 129
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 88
+
+    (69) loop_cond -> WHILE LPAREN . expresiones RPAREN DO bloque
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 130
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 89
+
+    (70) loop_no_cond -> FOR ID . nocond_aux ASSIGN expresiones TO expresiones DO bloque
+    (71) nocond_aux -> . LBRACK expresiones RBRACK
+    (72) nocond_aux -> . empty
+    (99) empty -> .
+
+    LBRACK          shift and go to state 132
+    ASSIGN          reduce using rule 99 (empty -> .)
+
+    nocond_aux                     shift and go to state 131
+    empty                          shift and go to state 133
+
+state 90
+
+    (73) expresiones -> t_exp or_check .
+
+    ID              reduce using rule 73 (expresiones -> t_exp or_check .)
+    RETURN          reduce using rule 73 (expresiones -> t_exp or_check .)
+    READ            reduce using rule 73 (expresiones -> t_exp or_check .)
+    WRITE           reduce using rule 73 (expresiones -> t_exp or_check .)
+    IF              reduce using rule 73 (expresiones -> t_exp or_check .)
+    WHILE           reduce using rule 73 (expresiones -> t_exp or_check .)
+    FOR             reduce using rule 73 (expresiones -> t_exp or_check .)
+    LPAREN          reduce using rule 73 (expresiones -> t_exp or_check .)
+    INT_CTE         reduce using rule 73 (expresiones -> t_exp or_check .)
+    FLOAT_CTE       reduce using rule 73 (expresiones -> t_exp or_check .)
+    RCURLY          reduce using rule 73 (expresiones -> t_exp or_check .)
+    RPAREN          reduce using rule 73 (expresiones -> t_exp or_check .)
+    COMMA           reduce using rule 73 (expresiones -> t_exp or_check .)
+    RBRACK          reduce using rule 73 (expresiones -> t_exp or_check .)
+    TO              reduce using rule 73 (expresiones -> t_exp or_check .)
+    DO              reduce using rule 73 (expresiones -> t_exp or_check .)
+
+
+state 91
+
+    (74) or_check -> OR_LOG . expresiones
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 134
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 92
+
+    (75) or_check -> empty .
+
+    ID              reduce using rule 75 (or_check -> empty .)
+    RETURN          reduce using rule 75 (or_check -> empty .)
+    READ            reduce using rule 75 (or_check -> empty .)
+    WRITE           reduce using rule 75 (or_check -> empty .)
+    IF              reduce using rule 75 (or_check -> empty .)
+    WHILE           reduce using rule 75 (or_check -> empty .)
+    FOR             reduce using rule 75 (or_check -> empty .)
+    LPAREN          reduce using rule 75 (or_check -> empty .)
+    INT_CTE         reduce using rule 75 (or_check -> empty .)
+    FLOAT_CTE       reduce using rule 75 (or_check -> empty .)
+    RCURLY          reduce using rule 75 (or_check -> empty .)
+    RPAREN          reduce using rule 75 (or_check -> empty .)
+    COMMA           reduce using rule 75 (or_check -> empty .)
+    RBRACK          reduce using rule 75 (or_check -> empty .)
+    TO              reduce using rule 75 (or_check -> empty .)
+    DO              reduce using rule 75 (or_check -> empty .)
+
+
+state 93
+
+    (76) t_exp -> g_exp and_check .
+
+    OR_LOG          reduce using rule 76 (t_exp -> g_exp and_check .)
+    ID              reduce using rule 76 (t_exp -> g_exp and_check .)
+    RETURN          reduce using rule 76 (t_exp -> g_exp and_check .)
+    READ            reduce using rule 76 (t_exp -> g_exp and_check .)
+    WRITE           reduce using rule 76 (t_exp -> g_exp and_check .)
+    IF              reduce using rule 76 (t_exp -> g_exp and_check .)
+    WHILE           reduce using rule 76 (t_exp -> g_exp and_check .)
+    FOR             reduce using rule 76 (t_exp -> g_exp and_check .)
+    LPAREN          reduce using rule 76 (t_exp -> g_exp and_check .)
+    INT_CTE         reduce using rule 76 (t_exp -> g_exp and_check .)
+    FLOAT_CTE       reduce using rule 76 (t_exp -> g_exp and_check .)
+    RCURLY          reduce using rule 76 (t_exp -> g_exp and_check .)
+    RPAREN          reduce using rule 76 (t_exp -> g_exp and_check .)
+    COMMA           reduce using rule 76 (t_exp -> g_exp and_check .)
+    RBRACK          reduce using rule 76 (t_exp -> g_exp and_check .)
+    TO              reduce using rule 76 (t_exp -> g_exp and_check .)
+    DO              reduce using rule 76 (t_exp -> g_exp and_check .)
+
+
+state 94
+
+    (77) and_check -> AND_LOG . t_exp
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    t_exp                          shift and go to state 135
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 95
+
+    (78) and_check -> empty .
+
+    OR_LOG          reduce using rule 78 (and_check -> empty .)
+    ID              reduce using rule 78 (and_check -> empty .)
+    RETURN          reduce using rule 78 (and_check -> empty .)
+    READ            reduce using rule 78 (and_check -> empty .)
+    WRITE           reduce using rule 78 (and_check -> empty .)
+    IF              reduce using rule 78 (and_check -> empty .)
+    WHILE           reduce using rule 78 (and_check -> empty .)
+    FOR             reduce using rule 78 (and_check -> empty .)
+    LPAREN          reduce using rule 78 (and_check -> empty .)
+    INT_CTE         reduce using rule 78 (and_check -> empty .)
+    FLOAT_CTE       reduce using rule 78 (and_check -> empty .)
+    RCURLY          reduce using rule 78 (and_check -> empty .)
+    RPAREN          reduce using rule 78 (and_check -> empty .)
+    COMMA           reduce using rule 78 (and_check -> empty .)
+    RBRACK          reduce using rule 78 (and_check -> empty .)
+    TO              reduce using rule 78 (and_check -> empty .)
+    DO              reduce using rule 78 (and_check -> empty .)
+
+
+state 96
+
+    (79) g_exp -> m_exp op_check .
+
+    AND_LOG         reduce using rule 79 (g_exp -> m_exp op_check .)
+    OR_LOG          reduce using rule 79 (g_exp -> m_exp op_check .)
+    ID              reduce using rule 79 (g_exp -> m_exp op_check .)
+    RETURN          reduce using rule 79 (g_exp -> m_exp op_check .)
+    READ            reduce using rule 79 (g_exp -> m_exp op_check .)
+    WRITE           reduce using rule 79 (g_exp -> m_exp op_check .)
+    IF              reduce using rule 79 (g_exp -> m_exp op_check .)
+    WHILE           reduce using rule 79 (g_exp -> m_exp op_check .)
+    FOR             reduce using rule 79 (g_exp -> m_exp op_check .)
+    LPAREN          reduce using rule 79 (g_exp -> m_exp op_check .)
+    INT_CTE         reduce using rule 79 (g_exp -> m_exp op_check .)
+    FLOAT_CTE       reduce using rule 79 (g_exp -> m_exp op_check .)
+    RCURLY          reduce using rule 79 (g_exp -> m_exp op_check .)
+    RPAREN          reduce using rule 79 (g_exp -> m_exp op_check .)
+    COMMA           reduce using rule 79 (g_exp -> m_exp op_check .)
+    RBRACK          reduce using rule 79 (g_exp -> m_exp op_check .)
+    TO              reduce using rule 79 (g_exp -> m_exp op_check .)
+    DO              reduce using rule 79 (g_exp -> m_exp op_check .)
+
+
+state 97
+
+    (80) op_check -> empty .
+
+    AND_LOG         reduce using rule 80 (op_check -> empty .)
+    OR_LOG          reduce using rule 80 (op_check -> empty .)
+    ID              reduce using rule 80 (op_check -> empty .)
+    RETURN          reduce using rule 80 (op_check -> empty .)
+    READ            reduce using rule 80 (op_check -> empty .)
+    WRITE           reduce using rule 80 (op_check -> empty .)
+    IF              reduce using rule 80 (op_check -> empty .)
+    WHILE           reduce using rule 80 (op_check -> empty .)
+    FOR             reduce using rule 80 (op_check -> empty .)
+    LPAREN          reduce using rule 80 (op_check -> empty .)
+    INT_CTE         reduce using rule 80 (op_check -> empty .)
+    FLOAT_CTE       reduce using rule 80 (op_check -> empty .)
+    RCURLY          reduce using rule 80 (op_check -> empty .)
+    RPAREN          reduce using rule 80 (op_check -> empty .)
+    COMMA           reduce using rule 80 (op_check -> empty .)
+    RBRACK          reduce using rule 80 (op_check -> empty .)
+    TO              reduce using rule 80 (op_check -> empty .)
+    DO              reduce using rule 80 (op_check -> empty .)
+
+
+state 98
+
+    (81) op_check -> comparacion . m_exp
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    m_exp                          shift and go to state 136
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 99
+
+    (82) comparacion -> GT_LOG .
+
+    LPAREN          reduce using rule 82 (comparacion -> GT_LOG .)
+    INT_CTE         reduce using rule 82 (comparacion -> GT_LOG .)
+    FLOAT_CTE       reduce using rule 82 (comparacion -> GT_LOG .)
+    ID              reduce using rule 82 (comparacion -> GT_LOG .)
+
+
+state 100
+
+    (83) comparacion -> LT_LOG .
+
+    LPAREN          reduce using rule 83 (comparacion -> LT_LOG .)
+    INT_CTE         reduce using rule 83 (comparacion -> LT_LOG .)
+    FLOAT_CTE       reduce using rule 83 (comparacion -> LT_LOG .)
+    ID              reduce using rule 83 (comparacion -> LT_LOG .)
+
+
+state 101
+
+    (84) comparacion -> EQUAL_LOG .
+
+    LPAREN          reduce using rule 84 (comparacion -> EQUAL_LOG .)
+    INT_CTE         reduce using rule 84 (comparacion -> EQUAL_LOG .)
+    FLOAT_CTE       reduce using rule 84 (comparacion -> EQUAL_LOG .)
+    ID              reduce using rule 84 (comparacion -> EQUAL_LOG .)
+
+
+state 102
+
+    (85) comparacion -> NE_LOG .
+
+    LPAREN          reduce using rule 85 (comparacion -> NE_LOG .)
+    INT_CTE         reduce using rule 85 (comparacion -> NE_LOG .)
+    FLOAT_CTE       reduce using rule 85 (comparacion -> NE_LOG .)
+    ID              reduce using rule 85 (comparacion -> NE_LOG .)
+
+
+state 103
+
+    (86) m_exp -> termino m_rec .
+
+    GT_LOG          reduce using rule 86 (m_exp -> termino m_rec .)
+    LT_LOG          reduce using rule 86 (m_exp -> termino m_rec .)
+    EQUAL_LOG       reduce using rule 86 (m_exp -> termino m_rec .)
+    NE_LOG          reduce using rule 86 (m_exp -> termino m_rec .)
+    AND_LOG         reduce using rule 86 (m_exp -> termino m_rec .)
+    OR_LOG          reduce using rule 86 (m_exp -> termino m_rec .)
+    ID              reduce using rule 86 (m_exp -> termino m_rec .)
+    RETURN          reduce using rule 86 (m_exp -> termino m_rec .)
+    READ            reduce using rule 86 (m_exp -> termino m_rec .)
+    WRITE           reduce using rule 86 (m_exp -> termino m_rec .)
+    IF              reduce using rule 86 (m_exp -> termino m_rec .)
+    WHILE           reduce using rule 86 (m_exp -> termino m_rec .)
+    FOR             reduce using rule 86 (m_exp -> termino m_rec .)
+    LPAREN          reduce using rule 86 (m_exp -> termino m_rec .)
+    INT_CTE         reduce using rule 86 (m_exp -> termino m_rec .)
+    FLOAT_CTE       reduce using rule 86 (m_exp -> termino m_rec .)
+    RCURLY          reduce using rule 86 (m_exp -> termino m_rec .)
+    RPAREN          reduce using rule 86 (m_exp -> termino m_rec .)
+    COMMA           reduce using rule 86 (m_exp -> termino m_rec .)
+    RBRACK          reduce using rule 86 (m_exp -> termino m_rec .)
+    TO              reduce using rule 86 (m_exp -> termino m_rec .)
+    DO              reduce using rule 86 (m_exp -> termino m_rec .)
+
+
+state 104
+
+    (87) m_rec -> PLUS_OP . m_exp
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    m_exp                          shift and go to state 137
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 105
+
+    (88) m_rec -> MINUS_OP . m_exp
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    m_exp                          shift and go to state 138
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 106
+
+    (89) m_rec -> empty .
+
+    GT_LOG          reduce using rule 89 (m_rec -> empty .)
+    LT_LOG          reduce using rule 89 (m_rec -> empty .)
+    EQUAL_LOG       reduce using rule 89 (m_rec -> empty .)
+    NE_LOG          reduce using rule 89 (m_rec -> empty .)
+    AND_LOG         reduce using rule 89 (m_rec -> empty .)
+    OR_LOG          reduce using rule 89 (m_rec -> empty .)
+    ID              reduce using rule 89 (m_rec -> empty .)
+    RETURN          reduce using rule 89 (m_rec -> empty .)
+    READ            reduce using rule 89 (m_rec -> empty .)
+    WRITE           reduce using rule 89 (m_rec -> empty .)
+    IF              reduce using rule 89 (m_rec -> empty .)
+    WHILE           reduce using rule 89 (m_rec -> empty .)
+    FOR             reduce using rule 89 (m_rec -> empty .)
+    LPAREN          reduce using rule 89 (m_rec -> empty .)
+    INT_CTE         reduce using rule 89 (m_rec -> empty .)
+    FLOAT_CTE       reduce using rule 89 (m_rec -> empty .)
+    RCURLY          reduce using rule 89 (m_rec -> empty .)
+    RPAREN          reduce using rule 89 (m_rec -> empty .)
+    COMMA           reduce using rule 89 (m_rec -> empty .)
+    RBRACK          reduce using rule 89 (m_rec -> empty .)
+    TO              reduce using rule 89 (m_rec -> empty .)
+    DO              reduce using rule 89 (m_rec -> empty .)
+
+
+state 107
+
+    (90) termino -> factor term_rec .
+
+    PLUS_OP         reduce using rule 90 (termino -> factor term_rec .)
+    MINUS_OP        reduce using rule 90 (termino -> factor term_rec .)
+    GT_LOG          reduce using rule 90 (termino -> factor term_rec .)
+    LT_LOG          reduce using rule 90 (termino -> factor term_rec .)
+    EQUAL_LOG       reduce using rule 90 (termino -> factor term_rec .)
+    NE_LOG          reduce using rule 90 (termino -> factor term_rec .)
+    AND_LOG         reduce using rule 90 (termino -> factor term_rec .)
+    OR_LOG          reduce using rule 90 (termino -> factor term_rec .)
+    ID              reduce using rule 90 (termino -> factor term_rec .)
+    RETURN          reduce using rule 90 (termino -> factor term_rec .)
+    READ            reduce using rule 90 (termino -> factor term_rec .)
+    WRITE           reduce using rule 90 (termino -> factor term_rec .)
+    IF              reduce using rule 90 (termino -> factor term_rec .)
+    WHILE           reduce using rule 90 (termino -> factor term_rec .)
+    FOR             reduce using rule 90 (termino -> factor term_rec .)
+    LPAREN          reduce using rule 90 (termino -> factor term_rec .)
+    INT_CTE         reduce using rule 90 (termino -> factor term_rec .)
+    FLOAT_CTE       reduce using rule 90 (termino -> factor term_rec .)
+    RCURLY          reduce using rule 90 (termino -> factor term_rec .)
+    RPAREN          reduce using rule 90 (termino -> factor term_rec .)
+    COMMA           reduce using rule 90 (termino -> factor term_rec .)
+    RBRACK          reduce using rule 90 (termino -> factor term_rec .)
+    TO              reduce using rule 90 (termino -> factor term_rec .)
+    DO              reduce using rule 90 (termino -> factor term_rec .)
+
+
+state 108
+
+    (91) term_rec -> MULT_OP . termino
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    termino                        shift and go to state 139
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 109
+
+    (92) term_rec -> DIV_OP . termino
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    termino                        shift and go to state 140
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 110
+
+    (93) term_rec -> empty .
+
+    PLUS_OP         reduce using rule 93 (term_rec -> empty .)
+    MINUS_OP        reduce using rule 93 (term_rec -> empty .)
+    GT_LOG          reduce using rule 93 (term_rec -> empty .)
+    LT_LOG          reduce using rule 93 (term_rec -> empty .)
+    EQUAL_LOG       reduce using rule 93 (term_rec -> empty .)
+    NE_LOG          reduce using rule 93 (term_rec -> empty .)
+    AND_LOG         reduce using rule 93 (term_rec -> empty .)
+    OR_LOG          reduce using rule 93 (term_rec -> empty .)
+    ID              reduce using rule 93 (term_rec -> empty .)
+    RETURN          reduce using rule 93 (term_rec -> empty .)
+    READ            reduce using rule 93 (term_rec -> empty .)
+    WRITE           reduce using rule 93 (term_rec -> empty .)
+    IF              reduce using rule 93 (term_rec -> empty .)
+    WHILE           reduce using rule 93 (term_rec -> empty .)
+    FOR             reduce using rule 93 (term_rec -> empty .)
+    LPAREN          reduce using rule 93 (term_rec -> empty .)
+    INT_CTE         reduce using rule 93 (term_rec -> empty .)
+    FLOAT_CTE       reduce using rule 93 (term_rec -> empty .)
+    RCURLY          reduce using rule 93 (term_rec -> empty .)
+    RPAREN          reduce using rule 93 (term_rec -> empty .)
+    COMMA           reduce using rule 93 (term_rec -> empty .)
+    RBRACK          reduce using rule 93 (term_rec -> empty .)
+    TO              reduce using rule 93 (term_rec -> empty .)
+    DO              reduce using rule 93 (term_rec -> empty .)
+
+
+state 111
+
+    (14) def_funciones -> FUNCTION tipos_func ID LPAREN parametros RPAREN SEMIC . dec_var_loc bloque
+    (20) dec_var_loc -> . VARS tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec
+    (21) dec_var_loc -> . empty
+    (99) empty -> .
+
+    VARS            shift and go to state 142
+    LCURLY          reduce using rule 99 (empty -> .)
+
+    dec_var_loc                    shift and go to state 141
+    empty                          shift and go to state 143
+
+state 112
+
+    (26) parametros -> tipos COLON ID . param_aux
+    (27) param_aux -> . COMMA parametros
+    (28) param_aux -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 145
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    param_aux                      shift and go to state 144
+    empty                          shift and go to state 146
+
+state 113
+
+    (4) dec_var_aux -> tipos COLON lista_ids . SEMIC dec_var_aux
+
+    SEMIC           shift and go to state 147
+
+
+state 114
+
+    (31) estatu_rec -> estatutos estatu_rec .
+
+    RCURLY          reduce using rule 31 (estatu_rec -> estatutos estatu_rec .)
+
+
+state 115
+
+    (30) bloque -> LCURLY estatutos estatu_rec RCURLY .
+
+    $end            reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    MAIN            reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    ELSE            reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    ID              reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    RETURN          reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    READ            reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    WRITE           reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    IF              reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    WHILE           reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    FOR             reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    LPAREN          reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    INT_CTE         reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    FLOAT_CTE       reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+    RCURLY          reduce using rule 30 (bloque -> LCURLY estatutos estatu_rec RCURLY .)
+
+
+state 116
+
+    (44) asignacion -> ID ASSIGN expresiones .
+
+    ID              reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    RETURN          reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    READ            reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    WRITE           reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    IF              reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    WHILE           reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    FOR             reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    LPAREN          reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    INT_CTE         reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    FLOAT_CTE       reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+    RCURLY          reduce using rule 44 (asignacion -> ID ASSIGN expresiones .)
+
+
+state 117
+
+    (46) llamada_func_aux -> ID . llama_func_auxb
+    (51) llamada_void_aux -> ID . llama_void_auxb
+    (48) llama_func_auxb -> . COMMA llamada_func_aux
+    (49) llama_func_auxb -> . empty
+    (53) llama_void_auxb -> . COMMA llamada_func_aux
+    (54) llama_void_auxb -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 150
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    llama_func_auxb                shift and go to state 148
+    llama_void_auxb                shift and go to state 149
+    empty                          shift and go to state 151
+
+state 118
+
+    (45) llamada_func -> ID LPAREN llamada_func_aux . RPAREN SEMIC
+
+    RPAREN          shift and go to state 152
+
+
+state 119
+
+    (50) llamada_void -> ID LPAREN llamada_void_aux . RPAREN SEMIC
+
+    RPAREN          shift and go to state 153
+
+
+state 120
+
+    (47) llamada_func_aux -> empty .
+    (52) llamada_void_aux -> empty .
+
+  ! reduce/reduce conflict for RPAREN resolved using rule 47 (llamada_func_aux -> empty .)
+    RPAREN          reduce using rule 47 (llamada_func_aux -> empty .)
+
+  ! RPAREN          [ reduce using rule 52 (llamada_void_aux -> empty .) ]
+
+
+state 121
+
+    (94) factor -> LPAREN expresiones RPAREN .
+
+    MULT_OP         reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    DIV_OP          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    PLUS_OP         reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    MINUS_OP        reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    GT_LOG          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    LT_LOG          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    EQUAL_LOG       reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    NE_LOG          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    AND_LOG         reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    OR_LOG          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    ID              reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    RETURN          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    READ            reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    WRITE           reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    IF              reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    WHILE           reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    FOR             reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    LPAREN          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    INT_CTE         reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    FLOAT_CTE       reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    RCURLY          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    RPAREN          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    COMMA           reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    RBRACK          reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    TO              reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+    DO              reduce using rule 94 (factor -> LPAREN expresiones RPAREN .)
+
+
+state 122
+
+    (45) llamada_func -> ID LPAREN . llamada_func_aux RPAREN SEMIC
+    (46) llamada_func_aux -> . ID llama_func_auxb
+    (47) llamada_func_aux -> . empty
+    (99) empty -> .
+
+    ID              shift and go to state 154
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    llamada_func_aux               shift and go to state 118
+    empty                          shift and go to state 155
+
+state 123
+
+    (55) retorno -> RETURN LPAREN expresiones . RPAREN SEMIC
+
+    RPAREN          shift and go to state 156
+
+
+state 124
+
+    (56) lectura -> READ LPAREN ID . lec_aux RPAREN SEMIC
+    (57) lec_aux -> . COMMA ID lec_aux
+    (58) lec_aux -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 158
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    lec_aux                        shift and go to state 157
+    empty                          shift and go to state 159
+
+state 125
+
+    (59) escritura -> WRITE LPAREN esc_aux . RPAREN SEMIC
+
+    RPAREN          shift and go to state 160
+
+
+state 126
+
+    (60) esc_aux -> STRING_CTE . esc_rec
+    (63) esc_rec -> . COMMA esc_aux
+    (64) esc_rec -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 162
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    esc_rec                        shift and go to state 161
+    empty                          shift and go to state 163
+
+state 127
+
+    (61) esc_aux -> expresiones . esc_rec
+    (63) esc_rec -> . COMMA esc_aux
+    (64) esc_rec -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 162
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    esc_rec                        shift and go to state 164
+    empty                          shift and go to state 163
+
+state 128
+
+    (62) esc_aux -> empty .
+
+    RPAREN          reduce using rule 62 (esc_aux -> empty .)
+
+
+state 129
+
+    (65) decision -> IF LPAREN expresiones . RPAREN THEN bloque dec_aux
+
+    RPAREN          shift and go to state 165
+
+
+state 130
+
+    (69) loop_cond -> WHILE LPAREN expresiones . RPAREN DO bloque
+
+    RPAREN          shift and go to state 166
+
+
+state 131
+
+    (70) loop_no_cond -> FOR ID nocond_aux . ASSIGN expresiones TO expresiones DO bloque
+
+    ASSIGN          shift and go to state 167
+
+
+state 132
+
+    (71) nocond_aux -> LBRACK . expresiones RBRACK
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 168
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 133
+
+    (72) nocond_aux -> empty .
+
+    ASSIGN          reduce using rule 72 (nocond_aux -> empty .)
+
+
+state 134
+
+    (74) or_check -> OR_LOG expresiones .
+
+    ID              reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    RETURN          reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    READ            reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    WRITE           reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    IF              reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    WHILE           reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    FOR             reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    LPAREN          reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    INT_CTE         reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    FLOAT_CTE       reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    RCURLY          reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    RPAREN          reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    COMMA           reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    RBRACK          reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    TO              reduce using rule 74 (or_check -> OR_LOG expresiones .)
+    DO              reduce using rule 74 (or_check -> OR_LOG expresiones .)
+
+
+state 135
+
+    (77) and_check -> AND_LOG t_exp .
+
+    OR_LOG          reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    ID              reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    RETURN          reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    READ            reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    WRITE           reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    IF              reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    WHILE           reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    FOR             reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    LPAREN          reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    INT_CTE         reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    FLOAT_CTE       reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    RCURLY          reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    RPAREN          reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    COMMA           reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    RBRACK          reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    TO              reduce using rule 77 (and_check -> AND_LOG t_exp .)
+    DO              reduce using rule 77 (and_check -> AND_LOG t_exp .)
+
+
+state 136
+
+    (81) op_check -> comparacion m_exp .
+
+    AND_LOG         reduce using rule 81 (op_check -> comparacion m_exp .)
+    OR_LOG          reduce using rule 81 (op_check -> comparacion m_exp .)
+    ID              reduce using rule 81 (op_check -> comparacion m_exp .)
+    RETURN          reduce using rule 81 (op_check -> comparacion m_exp .)
+    READ            reduce using rule 81 (op_check -> comparacion m_exp .)
+    WRITE           reduce using rule 81 (op_check -> comparacion m_exp .)
+    IF              reduce using rule 81 (op_check -> comparacion m_exp .)
+    WHILE           reduce using rule 81 (op_check -> comparacion m_exp .)
+    FOR             reduce using rule 81 (op_check -> comparacion m_exp .)
+    LPAREN          reduce using rule 81 (op_check -> comparacion m_exp .)
+    INT_CTE         reduce using rule 81 (op_check -> comparacion m_exp .)
+    FLOAT_CTE       reduce using rule 81 (op_check -> comparacion m_exp .)
+    RCURLY          reduce using rule 81 (op_check -> comparacion m_exp .)
+    RPAREN          reduce using rule 81 (op_check -> comparacion m_exp .)
+    COMMA           reduce using rule 81 (op_check -> comparacion m_exp .)
+    RBRACK          reduce using rule 81 (op_check -> comparacion m_exp .)
+    TO              reduce using rule 81 (op_check -> comparacion m_exp .)
+    DO              reduce using rule 81 (op_check -> comparacion m_exp .)
+
+
+state 137
+
+    (87) m_rec -> PLUS_OP m_exp .
+
+    GT_LOG          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    LT_LOG          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    EQUAL_LOG       reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    NE_LOG          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    AND_LOG         reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    OR_LOG          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    ID              reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    RETURN          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    READ            reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    WRITE           reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    IF              reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    WHILE           reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    FOR             reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    LPAREN          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    INT_CTE         reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    FLOAT_CTE       reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    RCURLY          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    RPAREN          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    COMMA           reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    RBRACK          reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    TO              reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+    DO              reduce using rule 87 (m_rec -> PLUS_OP m_exp .)
+
+
+state 138
+
+    (88) m_rec -> MINUS_OP m_exp .
+
+    GT_LOG          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    LT_LOG          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    EQUAL_LOG       reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    NE_LOG          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    AND_LOG         reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    OR_LOG          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    ID              reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    RETURN          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    READ            reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    WRITE           reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    IF              reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    WHILE           reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    FOR             reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    LPAREN          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    INT_CTE         reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    FLOAT_CTE       reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    RCURLY          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    RPAREN          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    COMMA           reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    RBRACK          reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    TO              reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+    DO              reduce using rule 88 (m_rec -> MINUS_OP m_exp .)
+
+
+state 139
+
+    (91) term_rec -> MULT_OP termino .
+
+    PLUS_OP         reduce using rule 91 (term_rec -> MULT_OP termino .)
+    MINUS_OP        reduce using rule 91 (term_rec -> MULT_OP termino .)
+    GT_LOG          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    LT_LOG          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    EQUAL_LOG       reduce using rule 91 (term_rec -> MULT_OP termino .)
+    NE_LOG          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    AND_LOG         reduce using rule 91 (term_rec -> MULT_OP termino .)
+    OR_LOG          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    ID              reduce using rule 91 (term_rec -> MULT_OP termino .)
+    RETURN          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    READ            reduce using rule 91 (term_rec -> MULT_OP termino .)
+    WRITE           reduce using rule 91 (term_rec -> MULT_OP termino .)
+    IF              reduce using rule 91 (term_rec -> MULT_OP termino .)
+    WHILE           reduce using rule 91 (term_rec -> MULT_OP termino .)
+    FOR             reduce using rule 91 (term_rec -> MULT_OP termino .)
+    LPAREN          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    INT_CTE         reduce using rule 91 (term_rec -> MULT_OP termino .)
+    FLOAT_CTE       reduce using rule 91 (term_rec -> MULT_OP termino .)
+    RCURLY          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    RPAREN          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    COMMA           reduce using rule 91 (term_rec -> MULT_OP termino .)
+    RBRACK          reduce using rule 91 (term_rec -> MULT_OP termino .)
+    TO              reduce using rule 91 (term_rec -> MULT_OP termino .)
+    DO              reduce using rule 91 (term_rec -> MULT_OP termino .)
+
+
+state 140
+
+    (92) term_rec -> DIV_OP termino .
+
+    PLUS_OP         reduce using rule 92 (term_rec -> DIV_OP termino .)
+    MINUS_OP        reduce using rule 92 (term_rec -> DIV_OP termino .)
+    GT_LOG          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    LT_LOG          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    EQUAL_LOG       reduce using rule 92 (term_rec -> DIV_OP termino .)
+    NE_LOG          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    AND_LOG         reduce using rule 92 (term_rec -> DIV_OP termino .)
+    OR_LOG          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    ID              reduce using rule 92 (term_rec -> DIV_OP termino .)
+    RETURN          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    READ            reduce using rule 92 (term_rec -> DIV_OP termino .)
+    WRITE           reduce using rule 92 (term_rec -> DIV_OP termino .)
+    IF              reduce using rule 92 (term_rec -> DIV_OP termino .)
+    WHILE           reduce using rule 92 (term_rec -> DIV_OP termino .)
+    FOR             reduce using rule 92 (term_rec -> DIV_OP termino .)
+    LPAREN          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    INT_CTE         reduce using rule 92 (term_rec -> DIV_OP termino .)
+    FLOAT_CTE       reduce using rule 92 (term_rec -> DIV_OP termino .)
+    RCURLY          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    RPAREN          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    COMMA           reduce using rule 92 (term_rec -> DIV_OP termino .)
+    RBRACK          reduce using rule 92 (term_rec -> DIV_OP termino .)
+    TO              reduce using rule 92 (term_rec -> DIV_OP termino .)
+    DO              reduce using rule 92 (term_rec -> DIV_OP termino .)
+
+
+state 141
+
+    (14) def_funciones -> FUNCTION tipos_func ID LPAREN parametros RPAREN SEMIC dec_var_loc . bloque
+    (30) bloque -> . LCURLY estatutos estatu_rec RCURLY
+
+    LCURLY          shift and go to state 34
+
+    bloque                         shift and go to state 169
+
+state 142
+
+    (20) dec_var_loc -> VARS . tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+
+    tipos                          shift and go to state 170
+
+state 143
+
+    (21) dec_var_loc -> empty .
+
+    LCURLY          reduce using rule 21 (dec_var_loc -> empty .)
+
+
+state 144
+
+    (26) parametros -> tipos COLON ID param_aux .
+
+    RPAREN          reduce using rule 26 (parametros -> tipos COLON ID param_aux .)
+
+
+state 145
+
+    (27) param_aux -> COMMA . parametros
+    (26) parametros -> . tipos COLON ID param_aux
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+
+    parametros                     shift and go to state 171
+    tipos                          shift and go to state 36
+
+state 146
+
+    (28) param_aux -> empty .
+
+    RPAREN          reduce using rule 28 (param_aux -> empty .)
+
+
+state 147
+
+    (4) dec_var_aux -> tipos COLON lista_ids SEMIC . dec_var_aux
+    (4) dec_var_aux -> . tipos COLON lista_ids SEMIC dec_var_aux
+    (5) dec_var_aux -> . empty
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+    (99) empty -> .
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+    FUNCTION        reduce using rule 99 (empty -> .)
+    MAIN            reduce using rule 99 (empty -> .)
+
+    tipos                          shift and go to state 37
+    dec_var_aux                    shift and go to state 172
+    empty                          shift and go to state 39
+
+state 148
+
+    (46) llamada_func_aux -> ID llama_func_auxb .
+
+    RPAREN          reduce using rule 46 (llamada_func_aux -> ID llama_func_auxb .)
+
+
+state 149
+
+    (51) llamada_void_aux -> ID llama_void_auxb .
+
+    RPAREN          reduce using rule 51 (llamada_void_aux -> ID llama_void_auxb .)
+
+
+state 150
+
+    (48) llama_func_auxb -> COMMA . llamada_func_aux
+    (53) llama_void_auxb -> COMMA . llamada_func_aux
+    (46) llamada_func_aux -> . ID llama_func_auxb
+    (47) llamada_func_aux -> . empty
+    (99) empty -> .
+
+    ID              shift and go to state 154
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    llamada_func_aux               shift and go to state 173
+    empty                          shift and go to state 155
+
+state 151
+
+    (49) llama_func_auxb -> empty .
+    (54) llama_void_auxb -> empty .
+
+  ! reduce/reduce conflict for RPAREN resolved using rule 49 (llama_func_auxb -> empty .)
+    RPAREN          reduce using rule 49 (llama_func_auxb -> empty .)
+
+  ! RPAREN          [ reduce using rule 54 (llama_void_auxb -> empty .) ]
+
+
+state 152
+
+    (45) llamada_func -> ID LPAREN llamada_func_aux RPAREN . SEMIC
+
+    SEMIC           shift and go to state 174
+
+
+state 153
+
+    (50) llamada_void -> ID LPAREN llamada_void_aux RPAREN . SEMIC
+
+    SEMIC           shift and go to state 175
+
+
+state 154
+
+    (46) llamada_func_aux -> ID . llama_func_auxb
+    (48) llama_func_auxb -> . COMMA llamada_func_aux
+    (49) llama_func_auxb -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 176
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    llama_func_auxb                shift and go to state 148
+    empty                          shift and go to state 177
+
+state 155
+
+    (47) llamada_func_aux -> empty .
+
+    RPAREN          reduce using rule 47 (llamada_func_aux -> empty .)
+
+
+state 156
+
+    (55) retorno -> RETURN LPAREN expresiones RPAREN . SEMIC
+
+    SEMIC           shift and go to state 178
+
+
+state 157
+
+    (56) lectura -> READ LPAREN ID lec_aux . RPAREN SEMIC
+
+    RPAREN          shift and go to state 179
+
+
+state 158
+
+    (57) lec_aux -> COMMA . ID lec_aux
+
+    ID              shift and go to state 180
+
+
+state 159
+
+    (58) lec_aux -> empty .
+
+    RPAREN          reduce using rule 58 (lec_aux -> empty .)
+
+
+state 160
+
+    (59) escritura -> WRITE LPAREN esc_aux RPAREN . SEMIC
+
+    SEMIC           shift and go to state 181
+
+
+state 161
+
+    (60) esc_aux -> STRING_CTE esc_rec .
+
+    RPAREN          reduce using rule 60 (esc_aux -> STRING_CTE esc_rec .)
+
+
+state 162
+
+    (63) esc_rec -> COMMA . esc_aux
+    (60) esc_aux -> . STRING_CTE esc_rec
+    (61) esc_aux -> . expresiones esc_rec
+    (62) esc_aux -> . empty
+    (73) expresiones -> . t_exp or_check
+    (99) empty -> .
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    STRING_CTE      shift and go to state 126
+    RPAREN          reduce using rule 99 (empty -> .)
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    esc_aux                        shift and go to state 182
+    expresiones                    shift and go to state 127
+    empty                          shift and go to state 128
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 163
+
+    (64) esc_rec -> empty .
+
+    RPAREN          reduce using rule 64 (esc_rec -> empty .)
+
+
+state 164
+
+    (61) esc_aux -> expresiones esc_rec .
+
+    RPAREN          reduce using rule 61 (esc_aux -> expresiones esc_rec .)
+
+
+state 165
+
+    (65) decision -> IF LPAREN expresiones RPAREN . THEN bloque dec_aux
+
+    THEN            shift and go to state 183
+
+
+state 166
+
+    (69) loop_cond -> WHILE LPAREN expresiones RPAREN . DO bloque
+
+    DO              shift and go to state 184
+
+
+state 167
+
+    (70) loop_no_cond -> FOR ID nocond_aux ASSIGN . expresiones TO expresiones DO bloque
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 185
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 168
+
+    (71) nocond_aux -> LBRACK expresiones . RBRACK
+
+    RBRACK          shift and go to state 186
+
+
+state 169
+
+    (14) def_funciones -> FUNCTION tipos_func ID LPAREN parametros RPAREN SEMIC dec_var_loc bloque .
+
+    MAIN            reduce using rule 14 (def_funciones -> FUNCTION tipos_func ID LPAREN parametros RPAREN SEMIC dec_var_loc bloque .)
+
+
+state 170
+
+    (20) dec_var_loc -> VARS tipos . COLON ID dec_var_loc_aux SEMIC var_loc_rec
+
+    COLON           shift and go to state 187
+
+
+state 171
+
+    (27) param_aux -> COMMA parametros .
+
+    RPAREN          reduce using rule 27 (param_aux -> COMMA parametros .)
+
+
+state 172
+
+    (4) dec_var_aux -> tipos COLON lista_ids SEMIC dec_var_aux .
+
+    FUNCTION        reduce using rule 4 (dec_var_aux -> tipos COLON lista_ids SEMIC dec_var_aux .)
+    MAIN            reduce using rule 4 (dec_var_aux -> tipos COLON lista_ids SEMIC dec_var_aux .)
+
+
+state 173
+
+    (48) llama_func_auxb -> COMMA llamada_func_aux .
+    (53) llama_void_auxb -> COMMA llamada_func_aux .
+
+  ! reduce/reduce conflict for RPAREN resolved using rule 48 (llama_func_auxb -> COMMA llamada_func_aux .)
+    RPAREN          reduce using rule 48 (llama_func_auxb -> COMMA llamada_func_aux .)
+
+  ! RPAREN          [ reduce using rule 53 (llama_void_auxb -> COMMA llamada_func_aux .) ]
+
+
+state 174
+
+    (45) llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .
+
+    ID              reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    RETURN          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    READ            reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    WRITE           reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    IF              reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    WHILE           reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    FOR             reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    LPAREN          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    INT_CTE         reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    FLOAT_CTE       reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    RCURLY          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    MULT_OP         reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    DIV_OP          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    PLUS_OP         reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    MINUS_OP        reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    GT_LOG          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    LT_LOG          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    EQUAL_LOG       reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    NE_LOG          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    AND_LOG         reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    OR_LOG          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    RPAREN          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    COMMA           reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    RBRACK          reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    TO              reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+    DO              reduce using rule 45 (llamada_func -> ID LPAREN llamada_func_aux RPAREN SEMIC .)
+
+
+state 175
+
+    (50) llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .
+
+    ID              reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    RETURN          reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    READ            reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    WRITE           reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    IF              reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    WHILE           reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    FOR             reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    LPAREN          reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    INT_CTE         reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    FLOAT_CTE       reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+    RCURLY          reduce using rule 50 (llamada_void -> ID LPAREN llamada_void_aux RPAREN SEMIC .)
+
+
+state 176
+
+    (48) llama_func_auxb -> COMMA . llamada_func_aux
+    (46) llamada_func_aux -> . ID llama_func_auxb
+    (47) llamada_func_aux -> . empty
+    (99) empty -> .
+
+    ID              shift and go to state 154
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    llamada_func_aux               shift and go to state 188
+    empty                          shift and go to state 155
+
+state 177
+
+    (49) llama_func_auxb -> empty .
+
+    RPAREN          reduce using rule 49 (llama_func_auxb -> empty .)
+
+
+state 178
+
+    (55) retorno -> RETURN LPAREN expresiones RPAREN SEMIC .
+
+    ID              reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    RETURN          reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    READ            reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    WRITE           reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    IF              reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    WHILE           reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    FOR             reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    LPAREN          reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    INT_CTE         reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    FLOAT_CTE       reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+    RCURLY          reduce using rule 55 (retorno -> RETURN LPAREN expresiones RPAREN SEMIC .)
+
+
+state 179
+
+    (56) lectura -> READ LPAREN ID lec_aux RPAREN . SEMIC
+
+    SEMIC           shift and go to state 189
+
+
+state 180
+
+    (57) lec_aux -> COMMA ID . lec_aux
+    (57) lec_aux -> . COMMA ID lec_aux
+    (58) lec_aux -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 158
+    RPAREN          reduce using rule 99 (empty -> .)
+
+    lec_aux                        shift and go to state 190
+    empty                          shift and go to state 159
+
+state 181
+
+    (59) escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .
+
+    ID              reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    RETURN          reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    READ            reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    WRITE           reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    IF              reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    WHILE           reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    FOR             reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    LPAREN          reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    INT_CTE         reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    FLOAT_CTE       reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+    RCURLY          reduce using rule 59 (escritura -> WRITE LPAREN esc_aux RPAREN SEMIC .)
+
+
+state 182
+
+    (63) esc_rec -> COMMA esc_aux .
+
+    RPAREN          reduce using rule 63 (esc_rec -> COMMA esc_aux .)
+
+
+state 183
+
+    (65) decision -> IF LPAREN expresiones RPAREN THEN . bloque dec_aux
+    (30) bloque -> . LCURLY estatutos estatu_rec RCURLY
+
+    LCURLY          shift and go to state 34
+
+    bloque                         shift and go to state 191
+
+state 184
+
+    (69) loop_cond -> WHILE LPAREN expresiones RPAREN DO . bloque
+    (30) bloque -> . LCURLY estatutos estatu_rec RCURLY
+
+    LCURLY          shift and go to state 34
+
+    bloque                         shift and go to state 192
+
+state 185
+
+    (70) loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones . TO expresiones DO bloque
+
+    TO              shift and go to state 193
+
+
+state 186
+
+    (71) nocond_aux -> LBRACK expresiones RBRACK .
+
+    ASSIGN          reduce using rule 71 (nocond_aux -> LBRACK expresiones RBRACK .)
+
+
+state 187
+
+    (20) dec_var_loc -> VARS tipos COLON . ID dec_var_loc_aux SEMIC var_loc_rec
+
+    ID              shift and go to state 194
+
+
+state 188
+
+    (48) llama_func_auxb -> COMMA llamada_func_aux .
+
+    RPAREN          reduce using rule 48 (llama_func_auxb -> COMMA llamada_func_aux .)
+
+
+state 189
+
+    (56) lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .
+
+    ID              reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    RETURN          reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    READ            reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    WRITE           reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    IF              reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    WHILE           reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    FOR             reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    LPAREN          reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    INT_CTE         reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    FLOAT_CTE       reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+    RCURLY          reduce using rule 56 (lectura -> READ LPAREN ID lec_aux RPAREN SEMIC .)
+
+
+state 190
+
+    (57) lec_aux -> COMMA ID lec_aux .
+
+    RPAREN          reduce using rule 57 (lec_aux -> COMMA ID lec_aux .)
+
+
+state 191
+
+    (65) decision -> IF LPAREN expresiones RPAREN THEN bloque . dec_aux
+    (66) dec_aux -> . else
+    (67) dec_aux -> . empty
+    (68) else -> . ELSE bloque
+    (99) empty -> .
+
+    ELSE            shift and go to state 198
+    ID              reduce using rule 99 (empty -> .)
+    RETURN          reduce using rule 99 (empty -> .)
+    READ            reduce using rule 99 (empty -> .)
+    WRITE           reduce using rule 99 (empty -> .)
+    IF              reduce using rule 99 (empty -> .)
+    WHILE           reduce using rule 99 (empty -> .)
+    FOR             reduce using rule 99 (empty -> .)
+    LPAREN          reduce using rule 99 (empty -> .)
+    INT_CTE         reduce using rule 99 (empty -> .)
+    FLOAT_CTE       reduce using rule 99 (empty -> .)
+    RCURLY          reduce using rule 99 (empty -> .)
+
+    dec_aux                        shift and go to state 195
+    else                           shift and go to state 196
+    empty                          shift and go to state 197
+
+state 192
+
+    (69) loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .
+
+    ID              reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    RETURN          reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    READ            reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    WRITE           reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    IF              reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    WHILE           reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    FOR             reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    LPAREN          reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    INT_CTE         reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    FLOAT_CTE       reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+    RCURLY          reduce using rule 69 (loop_cond -> WHILE LPAREN expresiones RPAREN DO bloque .)
+
+
+state 193
+
+    (70) loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO . expresiones DO bloque
+    (73) expresiones -> . t_exp or_check
+    (76) t_exp -> . g_exp and_check
+    (79) g_exp -> . m_exp op_check
+    (86) m_exp -> . termino m_rec
+    (90) termino -> . factor term_rec
+    (94) factor -> . LPAREN expresiones RPAREN
+    (95) factor -> . INT_CTE
+    (96) factor -> . FLOAT_CTE
+    (97) factor -> . ID
+    (98) factor -> . llamada_func
+    (45) llamada_func -> . ID LPAREN llamada_func_aux RPAREN SEMIC
+
+    LPAREN          shift and go to state 57
+    INT_CTE         shift and go to state 69
+    FLOAT_CTE       shift and go to state 70
+    ID              shift and go to state 82
+
+    expresiones                    shift and go to state 199
+    t_exp                          shift and go to state 64
+    g_exp                          shift and go to state 65
+    m_exp                          shift and go to state 66
+    termino                        shift and go to state 67
+    factor                         shift and go to state 68
+    llamada_func                   shift and go to state 83
+
+state 194
+
+    (20) dec_var_loc -> VARS tipos COLON ID . dec_var_loc_aux SEMIC var_loc_rec
+    (22) dec_var_loc_aux -> . COMMA ID dec_var_loc_aux
+    (23) dec_var_loc_aux -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 201
+    SEMIC           reduce using rule 99 (empty -> .)
+
+    dec_var_loc_aux                shift and go to state 200
+    empty                          shift and go to state 202
+
+state 195
+
+    (65) decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .
+
+    ID              reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    RETURN          reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    READ            reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    WRITE           reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    IF              reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    WHILE           reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    FOR             reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    LPAREN          reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    INT_CTE         reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    FLOAT_CTE       reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+    RCURLY          reduce using rule 65 (decision -> IF LPAREN expresiones RPAREN THEN bloque dec_aux .)
+
+
+state 196
+
+    (66) dec_aux -> else .
+
+    ID              reduce using rule 66 (dec_aux -> else .)
+    RETURN          reduce using rule 66 (dec_aux -> else .)
+    READ            reduce using rule 66 (dec_aux -> else .)
+    WRITE           reduce using rule 66 (dec_aux -> else .)
+    IF              reduce using rule 66 (dec_aux -> else .)
+    WHILE           reduce using rule 66 (dec_aux -> else .)
+    FOR             reduce using rule 66 (dec_aux -> else .)
+    LPAREN          reduce using rule 66 (dec_aux -> else .)
+    INT_CTE         reduce using rule 66 (dec_aux -> else .)
+    FLOAT_CTE       reduce using rule 66 (dec_aux -> else .)
+    RCURLY          reduce using rule 66 (dec_aux -> else .)
+
+
+state 197
+
+    (67) dec_aux -> empty .
+
+    ID              reduce using rule 67 (dec_aux -> empty .)
+    RETURN          reduce using rule 67 (dec_aux -> empty .)
+    READ            reduce using rule 67 (dec_aux -> empty .)
+    WRITE           reduce using rule 67 (dec_aux -> empty .)
+    IF              reduce using rule 67 (dec_aux -> empty .)
+    WHILE           reduce using rule 67 (dec_aux -> empty .)
+    FOR             reduce using rule 67 (dec_aux -> empty .)
+    LPAREN          reduce using rule 67 (dec_aux -> empty .)
+    INT_CTE         reduce using rule 67 (dec_aux -> empty .)
+    FLOAT_CTE       reduce using rule 67 (dec_aux -> empty .)
+    RCURLY          reduce using rule 67 (dec_aux -> empty .)
+
+
+state 198
+
+    (68) else -> ELSE . bloque
+    (30) bloque -> . LCURLY estatutos estatu_rec RCURLY
+
+    LCURLY          shift and go to state 34
+
+    bloque                         shift and go to state 203
+
+state 199
+
+    (70) loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones . DO bloque
+
+    DO              shift and go to state 204
+
+
+state 200
+
+    (20) dec_var_loc -> VARS tipos COLON ID dec_var_loc_aux . SEMIC var_loc_rec
+
+    SEMIC           shift and go to state 205
+
+
+state 201
+
+    (22) dec_var_loc_aux -> COMMA . ID dec_var_loc_aux
+
+    ID              shift and go to state 206
+
+
+state 202
+
+    (23) dec_var_loc_aux -> empty .
+
+    SEMIC           reduce using rule 23 (dec_var_loc_aux -> empty .)
+
+
+state 203
+
+    (68) else -> ELSE bloque .
+
+    ID              reduce using rule 68 (else -> ELSE bloque .)
+    RETURN          reduce using rule 68 (else -> ELSE bloque .)
+    READ            reduce using rule 68 (else -> ELSE bloque .)
+    WRITE           reduce using rule 68 (else -> ELSE bloque .)
+    IF              reduce using rule 68 (else -> ELSE bloque .)
+    WHILE           reduce using rule 68 (else -> ELSE bloque .)
+    FOR             reduce using rule 68 (else -> ELSE bloque .)
+    LPAREN          reduce using rule 68 (else -> ELSE bloque .)
+    INT_CTE         reduce using rule 68 (else -> ELSE bloque .)
+    FLOAT_CTE       reduce using rule 68 (else -> ELSE bloque .)
+    RCURLY          reduce using rule 68 (else -> ELSE bloque .)
+
+
+state 204
+
+    (70) loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO . bloque
+    (30) bloque -> . LCURLY estatutos estatu_rec RCURLY
+
+    LCURLY          shift and go to state 34
+
+    bloque                         shift and go to state 207
+
+state 205
+
+    (20) dec_var_loc -> VARS tipos COLON ID dec_var_loc_aux SEMIC . var_loc_rec
+    (24) var_loc_rec -> . tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec
+    (25) var_loc_rec -> . empty
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+    (99) empty -> .
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+    LCURLY          reduce using rule 99 (empty -> .)
+
+    tipos                          shift and go to state 208
+    var_loc_rec                    shift and go to state 209
+    empty                          shift and go to state 210
+
+state 206
+
+    (22) dec_var_loc_aux -> COMMA ID . dec_var_loc_aux
+    (22) dec_var_loc_aux -> . COMMA ID dec_var_loc_aux
+    (23) dec_var_loc_aux -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 201
+    SEMIC           reduce using rule 99 (empty -> .)
+
+    dec_var_loc_aux                shift and go to state 211
+    empty                          shift and go to state 202
+
+state 207
+
+    (70) loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .
+
+    ID              reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    RETURN          reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    READ            reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    WRITE           reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    IF              reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    WHILE           reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    FOR             reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    LPAREN          reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    INT_CTE         reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    FLOAT_CTE       reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+    RCURLY          reduce using rule 70 (loop_no_cond -> FOR ID nocond_aux ASSIGN expresiones TO expresiones DO bloque .)
+
+
+state 208
+
+    (24) var_loc_rec -> tipos . COLON ID dec_var_loc_aux SEMIC var_loc_rec
+
+    COLON           shift and go to state 212
+
+
+state 209
+
+    (20) dec_var_loc -> VARS tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec .
+
+    LCURLY          reduce using rule 20 (dec_var_loc -> VARS tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec .)
+
+
+state 210
+
+    (25) var_loc_rec -> empty .
+
+    LCURLY          reduce using rule 25 (var_loc_rec -> empty .)
+
+
+state 211
+
+    (22) dec_var_loc_aux -> COMMA ID dec_var_loc_aux .
+
+    SEMIC           reduce using rule 22 (dec_var_loc_aux -> COMMA ID dec_var_loc_aux .)
+
+
+state 212
+
+    (24) var_loc_rec -> tipos COLON . ID dec_var_loc_aux SEMIC var_loc_rec
+
+    ID              shift and go to state 213
+
+
+state 213
+
+    (24) var_loc_rec -> tipos COLON ID . dec_var_loc_aux SEMIC var_loc_rec
+    (22) dec_var_loc_aux -> . COMMA ID dec_var_loc_aux
+    (23) dec_var_loc_aux -> . empty
+    (99) empty -> .
+
+    COMMA           shift and go to state 201
+    SEMIC           reduce using rule 99 (empty -> .)
+
+    dec_var_loc_aux                shift and go to state 214
+    empty                          shift and go to state 202
+
+state 214
+
+    (24) var_loc_rec -> tipos COLON ID dec_var_loc_aux . SEMIC var_loc_rec
+
+    SEMIC           shift and go to state 215
+
+
+state 215
+
+    (24) var_loc_rec -> tipos COLON ID dec_var_loc_aux SEMIC . var_loc_rec
+    (24) var_loc_rec -> . tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec
+    (25) var_loc_rec -> . empty
+    (11) tipos -> . INT_CTE
+    (12) tipos -> . FLOAT_CTE
+    (13) tipos -> . CHAR_CTE
+    (99) empty -> .
+
+    INT_CTE         shift and go to state 12
+    FLOAT_CTE       shift and go to state 13
+    CHAR_CTE        shift and go to state 14
+    LCURLY          reduce using rule 99 (empty -> .)
+
+    tipos                          shift and go to state 208
+    var_loc_rec                    shift and go to state 216
+    empty                          shift and go to state 210
+
+state 216
+
+    (24) var_loc_rec -> tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec .
+
+    LCURLY          reduce using rule 24 (var_loc_rec -> tipos COLON ID dec_var_loc_aux SEMIC var_loc_rec .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ID in state 34 resolved as shift
+WARNING: shift/reduce conflict for RETURN in state 34 resolved as shift
+WARNING: shift/reduce conflict for READ in state 34 resolved as shift
+WARNING: shift/reduce conflict for WRITE in state 34 resolved as shift
+WARNING: shift/reduce conflict for IF in state 34 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 34 resolved as shift
+WARNING: shift/reduce conflict for FOR in state 34 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 34 resolved as shift
+WARNING: shift/reduce conflict for INT_CTE in state 34 resolved as shift
+WARNING: shift/reduce conflict for FLOAT_CTE in state 34 resolved as shift
+WARNING: shift/reduce conflict for ID in state 44 resolved as shift
+WARNING: shift/reduce conflict for RETURN in state 44 resolved as shift
+WARNING: shift/reduce conflict for READ in state 44 resolved as shift
+WARNING: shift/reduce conflict for WRITE in state 44 resolved as shift
+WARNING: shift/reduce conflict for IF in state 44 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 44 resolved as shift
+WARNING: shift/reduce conflict for FOR in state 44 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 44 resolved as shift
+WARNING: shift/reduce conflict for INT_CTE in state 44 resolved as shift
+WARNING: shift/reduce conflict for FLOAT_CTE in state 44 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 56 resolved as shift
+WARNING: shift/reduce conflict for ID in state 76 resolved as shift
+WARNING: shift/reduce conflict for RETURN in state 76 resolved as shift
+WARNING: shift/reduce conflict for READ in state 76 resolved as shift
+WARNING: shift/reduce conflict for WRITE in state 76 resolved as shift
+WARNING: shift/reduce conflict for IF in state 76 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 76 resolved as shift
+WARNING: shift/reduce conflict for FOR in state 76 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 76 resolved as shift
+WARNING: shift/reduce conflict for INT_CTE in state 76 resolved as shift
+WARNING: shift/reduce conflict for FLOAT_CTE in state 76 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 82 resolved as shift
+WARNING: reduce/reduce conflict in state 46 resolved using rule (estatutos -> llamada_func)
+WARNING: rejected rule (factor -> llamada_func) in state 46
+WARNING: reduce/reduce conflict in state 78 resolved using rule (estatu_rec -> empty)
+WARNING: rejected rule (estatutos -> empty) in state 78
+WARNING: reduce/reduce conflict in state 120 resolved using rule (llamada_func_aux -> empty)
+WARNING: rejected rule (llamada_void_aux -> empty) in state 120
+WARNING: reduce/reduce conflict in state 151 resolved using rule (llama_func_auxb -> empty)
+WARNING: rejected rule (llama_void_auxb -> empty) in state 151
+WARNING: reduce/reduce conflict in state 173 resolved using rule (llama_func_auxb -> COMMA llamada_func_aux)
+WARNING: rejected rule (llama_void_auxb -> COMMA llamada_func_aux) in state 173
+WARNING: Rule (llamada_void_aux -> empty) is never reduced
+WARNING: Rule (llama_void_auxb -> empty) is never reduced
+WARNING: Rule (llama_void_auxb -> COMMA llamada_func_aux) is never reduced
