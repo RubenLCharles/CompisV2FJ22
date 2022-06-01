@@ -1,7 +1,11 @@
+from asyncio import create_subprocess_exec
 import ply.yacc as yacc
 from lexer import tokens
 import re
 import os
+from CuboSem import *
+from cuadruplos import *
+from TFunc import *
 
 # PRECEDENCIA DE OPERADORES
 precedencia = {
@@ -136,7 +140,7 @@ def p_estatutos(p):
 
 def p_asignacion(p):
     '''
-    asignacion : ID ASSIGN expresiones
+    asignacion : ID ASSIGN pn_secu1 expresiones pn_secu2
     '''
 
 def p_llamada_func(p):
@@ -175,12 +179,12 @@ def p_llama_void_auxb(p):
 
 def p_retorno(p):
     '''
-    retorno : RETURN LPAREN expresiones RPAREN SEMIC
+    retorno : RETURN  pn_secu3 LPAREN expresiones RPAREN pn_secu5 SEMIC
     '''
 
 def p_lectura(p):
     '''
-    lectura : READ LPAREN ID lec_aux RPAREN SEMIC
+    lectura : READ pn_secu3 LPAREN ID lec_aux RPAREN SEMIC pn_secu4 pn_secu5
     '''
 
 def p_lec_aux(p):
@@ -191,13 +195,13 @@ def p_lec_aux(p):
 
 def p_escritura(p):
     '''
-    escritura : WRITE LPAREN esc_aux RPAREN SEMIC
+    escritura : WRITE pn_secu3 LPAREN esc_aux RPAREN SEMIC pn_secu5
     '''
 
 def p_esc_aux(p):
     '''
-    esc_aux : STRING_CTE esc_rec
-            | expresiones esc_rec
+    esc_aux : STRING_CTE pn_secu4 esc_rec
+            | expresiones pn_secu4 esc_rec
             | empty
     '''
 
@@ -209,23 +213,23 @@ def p_esc_rec(p):
 
 def p_decision(p):
     '''
-    decision : IF LPAREN expresiones RPAREN THEN bloque dec_aux
+    decision : IF LPAREN expresiones RPAREN pn_cond1 THEN bloque dec_aux
     '''
 
 def p_dec_aux(p):
     '''
-    dec_aux : else
+    dec_aux : else pn_cond2
             | empty
     '''
 
 def p_else(p):
     '''
-    else : ELSE bloque
+    else : ELSE pn_cond3 bloque
     '''
 
 def p_loop_cond(p):
     '''
-    loop_cond : WHILE LPAREN expresiones RPAREN DO bloque
+    loop_cond : WHILE pn_loop1 LPAREN expresiones RPAREN pn_loop2 DO bloque pn_loop3    
     '''
 
 def p_loop_no_cond(p):
@@ -248,7 +252,7 @@ def p_expresiones(p):
 
 def p_or_check(p):
     '''
-    or_check : OR_LOG expresiones
+    or_check : OR_LOG pn_expresion9 expresiones pn_expresion10
              | empty
     '''
 
@@ -259,7 +263,7 @@ def p_t_exp(p):
 
 def p_and_check(p):
     '''
-    and_check : AND_LOG t_exp
+    and_check : AND_LOG pn_expresion9 t_exp pn_expresion10
               | empty
     '''
 
@@ -271,44 +275,44 @@ def p_g_exp(p):
 def p_op_check(p):
     '''
     op_check : empty
-             | comparacion m_exp
+             | comparacion m_exp pn_expresion8
     '''
 
 def p_comparacion(p):
     '''
-    comparacion : GT_LOG
-                | LT_LOG
-                | EQUAL_LOG
-                | NE_LOG
+    comparacion : GT_LOG pn_expresion7
+                | LT_LOG pn_expresion7
+                | EQUAL_LOG pn_expresion7
+                | NE_LOG pn_expresion7
     '''
 
 def p_m_exp(p):
     '''
-    m_exp : termino m_rec
+    m_exp : termino pn_expresion3 m_rec
     '''
 
 def p_m_rec(p):
     '''
-    m_rec : PLUS_OP m_exp
-          | MINUS_OP m_exp
+    m_rec : PLUS_OP m_exp pn_expresion1
+          | MINUS_OP m_exp pn_expresion1
           | empty
     '''
 
 def p_termino(p):
     '''
-    termino : factor term_rec
+    termino : factor pn_expresion4 term_rec
     '''
 
 def p_term_rec(p):
     '''
-    term_rec : MULT_OP termino
-             | DIV_OP termino
+    term_rec : MULT_OP pn_expresion2 termino
+             | DIV_OP pn_expresion2 termino
              | empty
     '''
 
 def p_factor(p):
     '''
-    factor : LPAREN expresiones RPAREN
+    factor : LPAREN pn_expresiones5 expresiones RPAREN pn_expresiones6
            | INT_CTE
            | FLOAT_CTE
            | ID
@@ -320,7 +324,310 @@ def p_empty(p):
      'empty :'
      pass
 
+# Globales y pilas
+cuad = cuadruplos()
+func = TFunc()
+pOperad = []
+pOperan = []
+pTipos = []
+pSaltos = []
+temporal = []
+currentfunc = 0
+
+
+
+def p_pn_expresion1(p):
+    '''
+    pn_expresion1 : 
+    '''
+    global pOperad
+    if p[-1] != '+' or p[-1] != '-':
+        print("error")
+    else:
+        pOperad.append(p[-1])
+    
+    print(pOperad)
+
+def p_pn_expresion2(p):
+    '''
+    pn_expresion2:
+    '''
+    global pOperad
+    if p[-1] != '*' or p[-1] != '/':
+        print("error")
+    else:
+        pOperad.append(p[-1])
+
+def p_pn_expresion3(p):
+    '''
+    pn_expresion3 : 
+    '''
+    if pOperad.top() == '+' or pOperad.top() == '-':
+        derOperan = pOperan.pop()
+        derTipo = pTipos.pop()
+
+        izqOperan = pOperan.pop()
+        izqTipo = pTipos.pop()
+
+        operador = pOperad.pop()
+
+        resultado = CuboSem(izqTipo, derTipo, operador)
+
+        if resultado == "error":
+            print("Error de tipos")
+        else:
+            cuad = cuadruplos()
+
+            cuad.add(operador, derOperan, izqOperan, temporal)
+            pOperan.push(temporal)
+            pTipos.push(resultado)
+
+def p_pn_expresion4(p):
+    '''
+    pn_expresion4 : 
+    '''
+    if pOperad.top() == '*' or pOperad.top() == '/':
+        derOperan = pOperan.pop()
+        derTipo = pTipos.pop()
+
+        izqOperan = pOperan.pop()
+        izqTipo = pTipos.pop()
+
+        operador = pOperad.pop()
+
+        resultado = CuboSem(izqTipo, derTipo, operador)
+
+        if resultado == "error":
+            print("Error de tipos")
+        else:
+            cuad = cuadruplos()
+
+            cuad.add(operador, derOperan, izqOperan, temporal)
+            pOperan.push(temporal)
+            pTipos.push(resultado)
+
+def p_pn_expresion5(p):
+    '''
+    pn_expresion5 :
+    '''
+    global pOperad
+    pOperad.push('(')
+
+def p_pn_expresion6(p):
+    '''
+    pn_expresion6 :
+    '''
+    pOperad.pop()
+
+def p_pn_expresion7(p):
+    '''
+    pn_expresion7 :
+
+    '''
+    if p[-1] != '>' or p[-1] != '<' or p[-1] != '<=' or p[-1] != '>=':
+        print("error")
+    else:
+        pOperad.append(p[-1])
+
+def p_pn_expresion8(p):
+    '''
+    pn_expresion8 :
+
+    '''
+    if pOperad.top() == '>' or pOperad.top() == '<' or pOperad.top() == '<=' or pOperad.top() == '>=':
+        derOperan = pOperan.pop()
+        derTipo = pTipos.pop()
+
+        izqOperan = pOperan.pop()
+        izqTipo = pTipos.pop()
+
+        operador = pOperad.pop()
+
+        resultado = CuboSem(izqTipo, derTipo, operador)
+
+        if resultado == "error":
+            print("Error de tipos")
+        else:
+            cuad = cuadruplos()
+
+            cuad.add(operador, derOperan, izqOperan, temporal)
+            pOperan.push(temporal)
+            pTipos.push(resultado)
+
+def p_pn_expresion9(p) :
+    '''
+    pn_expresion9 :
+    '''
+    if p[-1] != '&&' or p[-1] != '||':
+        print("error")
+    else:
+        pOperad.append(p[-1])
+
+def p_pn_expresion10(p) :
+    '''
+    pn_expresion10 :
+    '''
+    if pOperad.top() == '&&' or pOperad.top() == '||':
+        derOperan = pOperan.pop()
+        derTipo = pTipos.pop()
+
+        izqOperan = pOperan.pop()
+        izqTipo = pTipos.pop()
+
+        operador = pOperad.pop()
+
+        resultado = CuboSem(izqTipo, derTipo, operador)
+
+        if resultado == "error":
+            print("Error de tipos")
+        else:
+            cuad = cuadruplos()
+
+            cuad.add(operador, derOperan, izqOperan, temporal)
+            pOperan.push(temporal)
+            pTipos.push(resultado)
+
+'''
+Secuenciales
+'''
+
+def p_pn_secu1(p) :
+    '''
+    pn_secu1 :
+    '''
+    if p[-1] != '=':
+        print("error")
+    else:
+        pOperad.append(p[-1])
+
+def p_pn_secu2(p) :
+    '''
+    pn_secu2 :
+    '''
+    if pOperad.top() == '=' :
+        derOperan = pOperan.pop()
+        derTipo = pTipos.pop()
+
+        izqOperan = pOperan.pop()
+        izqTipo = pTipos.pop()
+
+        operador = pOperad.pop()
+
+        resultado = CuboSem(izqTipo, derTipo, operador)
+
+        if resultado == "error":
+            print("Error de tipos")
+        else:
+            cuad = cuadruplos()
+
+            cuad.add(operador, izqOperan,'' , derOperan)
+            pOperan.push(temporal)
+            pTipos.push(resultado)
+
+def p_pn_secu3(p):
+    '''
+    pn_secu3 :
+    '''
+    if p[-1] != 'read' or p[-1] != 'write' or p[-1] != 'return':
+        print("error")
+    else:
+        pOperad.append(p[-1])
+
+def p_pn_secu4(p): 
+    '''
+    pn_secu4 :
+    '''
+    if pOperad.top() == 'read' or pOperad.top() == 'write' or pOperad.top() == 'return':
+        operador = pOperad.pop()
+     
+        operando = pOperan.pop()
+        cuad = cuadruplos()
+        cuad.add(operador, operando,'' , '')
+        
+
+def p_pn_secu5(p):
+    '''
+    pn_secu5 :
+    '''
+    pOperad.pop()
+
+def p_pn_secu6(p):
+    '''
+    pn_secu6 : 
+    '''
+    operador = pOperad.pop()
+    operando = pOperan.pop()
+    tipo = pTipos.pop()
+    cuad = cuadruplos()
+    cuad.add(operador, '','' , operando)
+
+def p_pn_cond1(p):
+    '''
+    pn_cond1 :
+    '''
+    cuadruplos
+    tipo = pTipos.pop()
+    if tipo != "error" :
+        resultado = pOperan.pop()
+        cuad = cuadruplos
+        cuad.add('GOTOF',resultado,'','')
+        pSaltos.append(len(cuad))
+
+def p_pn_cond2(p):
+    '''
+    pn_cond2 :
+    '''
+    ultimo = pSaltos.pop()
+    cuadFill = (cuad[ultimo][0], cuad[ultimo][1],cuad[ultimo][2], len(cuad))
+    cuad[ultimo] = cuadFill
+
+def p_pn_cond3(p):
+    '''
+    pn_cond3 :
+    '''
+    cuad.append('GOTO','','','')
+    falso = pSaltos.pop()
+    pSaltos.append(len(cuad)-1)
+    cuadFill = (cuad[falso][0], cuad[falso][1],cuad[falso][2], len(cuad))
+    cuad[falso] = cuadFill
+
+def p_pn_loop1(p):
+    '''
+    pn_loop1 :
+    '''
+    pSaltos.append(len(cuad))
+
+def p_pn_loop2(p):
+    '''
+    pn_loop2 :
+    '''
+    tipo = pTipos.pop()
+    if tipo != "bool":
+        print("Error")
+    else: 
+        resultado = pOperan.pop()
+        cuad.add('GOTOF', resultado, '', '')
+        pSaltos.append(len(cuad)-1)
+
+def p_pn_loop3(p):
+    '''
+    pn_loop3 :
+    '''
+    ultimo = pSaltos.pop()
+    retorna = pSaltos.pop()
+    cuad.add('GOTO', '', '', retorna)
+
+    cuadFill = (cuad[ultimo][0], cuad[ultimo][1],cuad[ultimo][2], len(cuad))
+    cuad[ultimo] = cuadFill
+
+#Agregar Funcion
+def p_pn_func1(p):
+    '''
+    pn_func1 :
+    '''
 
 
 parser = yacc.yacc()
-res = parser.parse("program PRUEBA ; main () { 2 }")
+res = parser.parse("program PRUEBA; main () { cont = 2 + 3 * 8 * ( 2 + 4 ) }")
+
+#program PRUEBA; main () { cont = 2 + 3 * 8 * ( 2 + 4 ) }
