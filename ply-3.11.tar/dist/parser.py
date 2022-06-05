@@ -1,3 +1,4 @@
+#from ast import Param
 from asyncio import create_subprocess_exec
 import ply.yacc as yacc
 from lexer import tokens
@@ -6,6 +7,27 @@ import os
 from CuboSem import *
 from cuadruplos import *
 from TFunc import *
+from MemVirtual import *
+
+# Globales y pilas
+cuad = cuadruplos()
+dirFunc = TFunc()
+pOperad = []
+pOperan = []
+pTipos = []
+pSaltos = []
+pFunc = []
+temporal = []
+pMemoria = []
+espMem = 500
+nombFunc = "global"
+nombVar = ""
+tipoAct = ""            #Tipo de la Variable
+voidBool = False
+numVars = 0
+numParams = 0
+contArg = 0
+MemVirtual = MemVirtual()
 
 # PRECEDENCIA DE OPERADORES
 precedencia = {
@@ -56,24 +78,22 @@ def p_lista_aux_b(p):
 
 def p_tipos(p):
     '''
-    tipos   : INT_CTE
-            | FLOAT_CTE
-            | CHAR_CTE
+    tipos   : INT_CTE pn_tipoAct
+            | FLOAT_CTE pn_tipoAct
+            | CHAR_CTE pn_tipoAct
     '''
 
 # DEFINICION DE FUNCIONES
 def p_def_funciones(p):
     '''
-    def_funciones : FUNCTION tipos_func ID LPAREN parametros RPAREN SEMIC dec_var_loc bloque
+    def_funciones : FUNCTION tipos_func ID pn_func1 LPAREN parametros RPAREN pn_func3 SEMIC dec_var_loc bloque pn_func4
                   | empty
     '''
 
 def p_tipos_func(p):
     '''
-    tipos_func : INT_CTE
-               | FLOAT_CTE
-               | CHAR_CTE
-               | VOID
+    tipos_func : INT_CTE pn_tipoAct
+               | VOID pn_tipoAct
     '''
 
 def p_dec_var_loc(p):
@@ -96,7 +116,7 @@ def p_var_loc_rec(p):
 
 def p_parametros(p):
     '''
-    parametros : tipos COLON ID param_aux
+    parametros : tipos COLON ID pn_func2 param_aux
     '''
 
 def p_param_aux(p):
@@ -324,15 +344,6 @@ def p_empty(p):
      'empty :'
      pass
 
-# Globales y pilas
-cuad = cuadruplos()
-func = TFunc()
-pOperad = []
-pOperan = []
-pTipos = []
-pSaltos = []
-temporal = []
-currentfunc = 0
 
 
 
@@ -481,8 +492,6 @@ def p_pn_expresion10(p) :
         if resultado == "error":
             print("Error de tipos")
         else:
-            cuad = cuadruplos()
-
             cuad.add(operador, derOperan, izqOperan, temporal)
             pOperan.push(temporal)
             pTipos.push(resultado)
@@ -620,11 +629,85 @@ def p_pn_loop3(p):
     cuadFill = (cuad[ultimo][0], cuad[ultimo][1],cuad[ultimo][2], len(cuad))
     cuad[ultimo] = cuadFill
 
+def p_pn_tipoAct(p):
+    '''
+    pn_tipoAct : 
+    '''
+    tipoAct = p[-1]
+
+
+
 #Agregar Funcion
 def p_pn_func1(p):
     '''
     pn_func1 :
     '''
+    nombFunc = p[-1]
+    numParams = 0
+
+    dirFunc.agregarFunc(tipoAct, nombFunc, numParams, len(cuad))
+
+    if dirFunc.dicc[nombFunc]["tipo"] == "void":
+        voidBool = True
+    else :
+        voidBool = False
+
+def p_pn_func2(p):
+    '''
+    pn_func2 :
+    '''
+    nombVar = p[-1]
+    numParams = numParams+1
+    numVars = numVars+1
+    posMem = MemVirtual.memoria(tipoAct, nombFunc)
+    dirFunc.agregarVarFunc(nombFunc, nombVar, posMem)
+    
+def p_pn_func3(p):
+    '''
+    pn_func3 : 
+    '''
+    dirFunc.modificarVarsFunc(nombFunc,numParams)
+
+def p_pn_func4(p):
+    '''
+    pn_func4 : 
+    '''
+    MemVirtual.eliminar()
+    cuad.add("ENDFUNC",'','','')
+
+def p_pn_llamFunc1(p):
+    '''
+    pn_llamFunc1 :
+    '''
+    nomb = p[-1]
+
+    if nomb in dirFunc.dicc:
+        pFunc.append(nomb)
+        cuad.add("ERA",nomb,'','')
+
+def p_pn_llamFunc2(p):
+    '''
+    pn_llamFunc2 :
+    '''
+    arg = pOperan.pop()
+    tipoArg = pTipos.pop()
+    argMem = pMemoria.pop()
+    nombFunc = pFunc.pop()
+    contArg += 1
+    param = "PARAM" + str(contArg)
+
+    lista = dirFunc.listaTipos(nombFunc)
+    
+
+
+
+def p_pn_GotoMain(p):
+    '''
+    pn_GotoMain
+    '''
+    cuad.add("GOTO",'','','')
+    pSaltos.append(p[-1])
+
 
 
 parser = yacc.yacc()

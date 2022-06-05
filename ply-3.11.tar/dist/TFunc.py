@@ -1,9 +1,16 @@
 from TVars import *
 
 class TFunc:
-    def __init__(self): self.dicc = {}
+    def __init__(self): self.dicc = {
+        'global' : {
+            'tipo':'void', 
+            'nombre': 'global',
+            'numParam':0, 
+            'variables':TVars(), 
+            'cantCuad':0 }
+        }
 
-    def agregarFunc(self, tipo, nombre, numParam):
+    def agregarFunc(self, tipo, nombre, numParam, cantCuad):
         if nombre in self.dicc.keys():
             print("ya existe")
         else:
@@ -11,7 +18,8 @@ class TFunc:
                 "tipo" : tipo,
                 "nombre" : nombre,
                 "numParam" : numParam,
-                "variables" : TVars()
+                "variables" : TVars(),
+                "cantCuad" : cantCuad
             }
 
     def agregarVarFunc(self, nombre, tipo, posMem):
@@ -30,5 +38,9 @@ class TFunc:
         else:
             print("no existe variable")
 
+    def listaTipos(self, nombre):
+        return [self.dicc[nombre]['variables'].variable.dicc[i]['tipo'] for i in self.dicc[nombre]['variables'].dicc]
 
+    def modificarVarsFunc(self, nombre, numParams):
+         self.dicc[nombre]['numparams'] = numParams
     
