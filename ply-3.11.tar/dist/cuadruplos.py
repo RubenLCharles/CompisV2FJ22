@@ -1,9 +1,13 @@
+cuad = []
+
 class cuadruplos():
 
-    def __init__ (self):
-        cuad = []
-        
-
     def add(self, op, opnA, opnB, res):
-        cuad += [(op, opnA, opnB, res)]
+        cuad.append([(op, opnA, opnB, res)])
+
+    def print(self):
+        x = 0
+        while x < len(cuad):
+            print(cuad[x])
+            x = x+1
         

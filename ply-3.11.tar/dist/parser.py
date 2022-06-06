@@ -19,6 +19,9 @@ pSaltos = []
 pFunc = []
 temporal = []
 pMemoria = []
+cteInt = []
+cteFlt = []
+cteStr = []
 espMem = 500
 nombFunc = "global"
 nombVar = ""
@@ -44,12 +47,12 @@ precedencia = {
 
 # INICIO
 def p_program(p):
-    'program : PROGRAM ID SEMIC dec_var_gob def_funciones main'
+    'program : PROGRAM ID SEMIC dec_var_gob def_funciones main pn_print'
 
 # VARIABLES Y TIPOS
 def p_dec_var_gob(p):
     '''
-    dec_var_gob : VARS tipos COLON lista_ids SEMIC dec_var_aux
+    dec_var_gob : VARS tipos COLON lista_ids dec_var_aux
                 | empty
     '''
 
@@ -78,9 +81,9 @@ def p_lista_aux_b(p):
 
 def p_tipos(p):
     '''
-    tipos   : INT_CTE pn_tipoAct
-            | FLOAT_CTE pn_tipoAct
-            | CHAR_CTE pn_tipoAct
+    tipos   : INT_TYPE pn_tipoAct
+            | FLOAT_TYPE pn_tipoAct
+            | CHAR_TYPE pn_tipoAct
     '''
 
 # DEFINICION DE FUNCIONES
@@ -92,7 +95,7 @@ def p_def_funciones(p):
 
 def p_tipos_func(p):
     '''
-    tipos_func : INT_CTE pn_tipoAct
+    tipos_func : INT_TYPE pn_tipoAct
                | VOID pn_tipoAct
     '''
 
@@ -146,6 +149,7 @@ def p_estatu_rec(p):
 def p_estatutos(p):
     '''
     estatutos : asignacion
+              | declaracion
               | llamada_func
               | llamada_void
               | retorno
@@ -160,17 +164,28 @@ def p_estatutos(p):
 
 def p_asignacion(p):
     '''
-    asignacion : ID ASSIGN pn_secu1 expresiones pn_secu2
+    asignacion : ID pn_expresionID ASSIGN pn_secu1 expresiones pn_secu2
+    '''
+
+def p_declaracion(p):
+    '''
+    declaracion : tipos ID pn_expresionID declaracion_aux SEMIC
+    '''
+
+def p_declaracion_aux(p):
+    '''
+    declaracion_aux : ASSIGN pn_secu1 expresiones pn_secu2
+                    | empty
     '''
 
 def p_llamada_func(p):
     '''
-    llamada_func : ID LPAREN llamada_func_aux RPAREN SEMIC
+    llamada_func : ID pn_llamFunc1 LPAREN pn_expresion5 llamada_func_aux RPAREN pn_expresion6 pn_llamFunc3 SEMIC
     '''
 
 def p_llamada_func_aux(p):
     '''
-    llamada_func_aux : ID llama_func_auxb
+    llamada_func_aux : expresiones pn_llamFunc2 llama_func_auxb
                      | empty
     '''
 
@@ -182,12 +197,12 @@ def p_llama_func_auxb(p):
 
 def p_llamada_void(p):
     '''
-    llamada_void : ID LPAREN llamada_void_aux RPAREN SEMIC
+    llamada_void : ID pn_llamFunc1 LPAREN llamada_void_aux RPAREN pn_llamFunc3 SEMIC
     '''
 
 def p_llamada_void_aux(p):
     '''
-    llamada_void_aux : ID llama_void_auxb
+    llamada_void_aux : expresiones pn_llamFunc2 llama_void_auxb
                      | empty
     '''
 
@@ -199,7 +214,7 @@ def p_llama_void_auxb(p):
 
 def p_retorno(p):
     '''
-    retorno : RETURN  pn_secu3 LPAREN expresiones RPAREN pn_secu5 SEMIC
+    retorno : RETURN  pn_secu3 LPAREN expresiones RPAREN SEMIC
     '''
 
 def p_lectura(p):
@@ -313,8 +328,8 @@ def p_m_exp(p):
 
 def p_m_rec(p):
     '''
-    m_rec : PLUS_OP m_exp pn_expresion1
-          | MINUS_OP m_exp pn_expresion1
+    m_rec : PLUS_OP pn_expresion1 m_exp 
+          | MINUS_OP pn_expresion1 m_exp 
           | empty
     '''
 
@@ -332,9 +347,9 @@ def p_term_rec(p):
 
 def p_factor(p):
     '''
-    factor : LPAREN pn_expresiones5 expresiones RPAREN pn_expresiones6
-           | INT_CTE
-           | FLOAT_CTE
+    factor : LPAREN pn_expresion5 expresiones RPAREN pn_expresion6
+           | INT_CTE pn_constante
+           | FLOAT_CTE pn_constante
            | ID
            | llamada_func
     '''
@@ -344,27 +359,29 @@ def p_empty(p):
      'empty :'
      pass
 
-
-
+def p_pn_expresionID(p):
+    '''
+    pn_expresionID :
+    '''
+    pOperan.append(p[-1])
 
 def p_pn_expresion1(p):
     '''
     pn_expresion1 : 
     '''
     global pOperad
-    if p[-1] != '+' or p[-1] != '-':
-        print("error")
+    if p[-1] != '+' and p[-1] != '-':
+        print("error2")
     else:
         pOperad.append(p[-1])
     
-    print(pOperad)
 
 def p_pn_expresion2(p):
     '''
-    pn_expresion2:
+    pn_expresion2 :
     '''
     global pOperad
-    if p[-1] != '*' or p[-1] != '/':
+    if p[-1] != '*' and p[-1] != '/':
         print("error")
     else:
         pOperad.append(p[-1])
@@ -373,7 +390,10 @@ def p_pn_expresion3(p):
     '''
     pn_expresion3 : 
     '''
-    if pOperad.top() == '+' or pOperad.top() == '-':
+    global cuad
+
+    temp = pOperad[len(pOperad)-1]
+    if temp == '+' or temp == '-':
         derOperan = pOperan.pop()
         derTipo = pTipos.pop()
 
@@ -383,21 +403,22 @@ def p_pn_expresion3(p):
         operador = pOperad.pop()
 
         resultado = CuboSem(izqTipo, derTipo, operador)
+        tempRes =  MemVirtual.temporales(resultado)
 
         if resultado == "error":
             print("Error de tipos")
         else:
-            cuad = cuadruplos()
 
-            cuad.add(operador, derOperan, izqOperan, temporal)
-            pOperan.push(temporal)
-            pTipos.push(resultado)
+            cuad.add(operador, izqOperan, derOperan, tempRes)
+            pOperan.append(tempRes)
+            pTipos.append(resultado)
 
 def p_pn_expresion4(p):
     '''
     pn_expresion4 : 
     '''
-    if pOperad.top() == '*' or pOperad.top() == '/':
+    temp = pOperad[len(pOperad)-1]
+    if temp == '*' or temp == '/':
         derOperan = pOperan.pop()
         derTipo = pTipos.pop()
 
@@ -407,35 +428,36 @@ def p_pn_expresion4(p):
         operador = pOperad.pop()
 
         resultado = CuboSem(izqTipo, derTipo, operador)
+        print(resultado)
+        tempRes =  MemVirtual.temporales(resultado)
 
         if resultado == "error":
             print("Error de tipos")
         else:
-            cuad = cuadruplos()
-
-            cuad.add(operador, derOperan, izqOperan, temporal)
-            pOperan.push(temporal)
-            pTipos.push(resultado)
+            cuad.add(operador, izqOperan, derOperan, tempRes)
+            pOperan.append(tempRes)
+            pTipos.append(resultado)
 
 def p_pn_expresion5(p):
     '''
     pn_expresion5 :
     '''
     global pOperad
-    pOperad.push('(')
+    pOperad.append('(')
 
 def p_pn_expresion6(p):
     '''
     pn_expresion6 :
     '''
     pOperad.pop()
+    
 
 def p_pn_expresion7(p):
     '''
     pn_expresion7 :
 
     '''
-    if p[-1] != '>' or p[-1] != '<' or p[-1] != '<=' or p[-1] != '>=':
+    if p[-1] != '>' and p[-1] != '<' and p[-1] != '<=' and p[-1] != '>=':
         print("error")
     else:
         pOperad.append(p[-1])
@@ -459,11 +481,10 @@ def p_pn_expresion8(p):
         if resultado == "error":
             print("Error de tipos")
         else:
-            cuad = cuadruplos()
 
-            cuad.add(operador, derOperan, izqOperan, temporal)
-            pOperan.push(temporal)
-            pTipos.push(resultado)
+            cuad.add(operador, izqOperan, derOperan, temporal)
+            pOperan.append(temporal)
+            pTipos.append(resultado)
 
 def p_pn_expresion9(p) :
     '''
@@ -492,9 +513,9 @@ def p_pn_expresion10(p) :
         if resultado == "error":
             print("Error de tipos")
         else:
-            cuad.add(operador, derOperan, izqOperan, temporal)
-            pOperan.push(temporal)
-            pTipos.push(resultado)
+            cuad.add(operador, izqOperan, derOperan, temporal)
+            pOperan.append(temporal)
+            pTipos.append(resultado)
 
 '''
 Secuenciales
@@ -513,7 +534,10 @@ def p_pn_secu2(p) :
     '''
     pn_secu2 :
     '''
-    if pOperad.top() == '=' :
+    global cuad
+
+    temp = pOperad[len(pOperad)-1]
+    if temp == '=' :
         derOperan = pOperan.pop()
         derTipo = pTipos.pop()
 
@@ -527,11 +551,10 @@ def p_pn_secu2(p) :
         if resultado == "error":
             print("Error de tipos")
         else:
-            cuad = cuadruplos()
 
-            cuad.add(operador, izqOperan,'' , derOperan)
-            pOperan.push(temporal)
-            pTipos.push(resultado)
+            cuad.add(operador, derOperan, '' , izqOperan)
+            pOperan.append(MemVirtual.temporales(resultado))
+            pTipos.append(resultado)
 
 def p_pn_secu3(p):
     '''
@@ -550,7 +573,6 @@ def p_pn_secu4(p):
         operador = pOperad.pop()
      
         operando = pOperan.pop()
-        cuad = cuadruplos()
         cuad.add(operador, operando,'' , '')
         
 
@@ -560,25 +582,22 @@ def p_pn_secu5(p):
     '''
     pOperad.pop()
 
-def p_pn_secu6(p):
-    '''
-    pn_secu6 : 
-    '''
-    operador = pOperad.pop()
-    operando = pOperan.pop()
-    tipo = pTipos.pop()
-    cuad = cuadruplos()
-    cuad.add(operador, '','' , operando)
+# def p_pn_secu6(p):
+#   '''
+#    pn_secu6 : 
+#    '''
+#    operador = pOperad.pop()
+#    operando = pOperan.pop()
+#    tipo = pTipos.pop()
+#    cuad.add(operador, '','' , operando)
 
 def p_pn_cond1(p):
     '''
     pn_cond1 :
     '''
-    cuadruplos
     tipo = pTipos.pop()
     if tipo != "error" :
         resultado = pOperan.pop()
-        cuad = cuadruplos
         cuad.add('GOTOF',resultado,'','')
         pSaltos.append(len(cuad))
 
@@ -634,7 +653,7 @@ def p_pn_tipoAct(p):
     pn_tipoAct : 
     '''
     tipoAct = p[-1]
-
+    pTipos.append(tipoAct)
 
 
 #Agregar Funcion
@@ -689,28 +708,94 @@ def p_pn_llamFunc2(p):
     '''
     pn_llamFunc2 :
     '''
-    arg = pOperan.pop()
-    tipoArg = pTipos.pop()
+    pOperan.pop()
+    pTipos.pop()
+    pFunc.pop()
     argMem = pMemoria.pop()
-    nombFunc = pFunc.pop()
     contArg += 1
-    param = "PARAM" + str(contArg)
 
-    lista = dirFunc.listaTipos(nombFunc)
-    
+    cuad.add("PARAM", argMem,"",contArg)
 
+def p_pn_llamFunc3(p):
+    '''
+    pn_llamFunc3 :
+    '''
+    nomFunc = pFunc.pop()
+    cantCuad = dirFunc.dicc[nomFunc]['cantCuad']
 
+    cuad.add("GOSUB",nomFunc,len(cuad)+1, cantCuad)
+    tipoFunc = dirFunc.dicc[nomFunc]['tipo']
+
+    if tipoFunc != "void":
+        cuad.add("=",nomFunc,"",MemVirtual.temporales(tipoFunc))
+        pOperan.append(MemVirtual.temporales(tipoFunc))
+        # pMemoria.append(MemVirtual.temporales(tipoFunc))
+        pTipos.append(tipoFunc)
 
 def p_pn_GotoMain(p):
     '''
-    pn_GotoMain
+    pn_GotoMain :
     '''
     cuad.add("GOTO",'','','')
     pSaltos.append(p[-1])
 
+def p_pn_constante(p):
+    '''
+    pn_constante :
+    '''
+    global iniIntCNS
+    global iniFltCNS
+    global iniStrCNS
 
+    if type(p[-1]) == int :
+        if p[-1] not in cteInt :
+            if iniIntCNS < limIntCNS :
+                cteInt.append(p[-1])
+                iniIntCNS += 1
+            else :
+                print("Error: ya no hay memoria")
+        pOperan.append(p[-1])
+        pMemoria.append(p[-1])
+        pTipos.append("entero")
 
+    elif type(p[-1]) == float :
+        if p[-1] not in cteFlt :
+            if iniFltCNS < limFltCNS :
+                cteFlt.append(p[-1])
+                iniFltCNS += 1
+            else :
+                print("Error: ya no hay memoria")
+        pOperan.append(p[-1])
+        pMemoria.append(p[-1])
+        pTipos.append("float")
+    
+    elif type(p[-1]) == str :
+        if p[-1] not in cteStr :
+            if iniStrCNS < limStrCNS :
+                cteStr.append(p[-1])
+                iniStrCNS += 1
+            else :
+                print("Error: ya no hay memoria")
+        pOperan.append(p[-1])
+        pMemoria.append(p[-1])
+        pTipos.append("string")
+
+def p_pn_print(p):
+    '''
+    pn_print :
+    '''
+    print("operadores")
+    print(pOperad)
+    print("operandos")
+    print(pOperan)
+    print("cuads:")
+    cuad.print()
+    print("Tipos:")
+    print(pTipos)
+
+# Pruebas
+archivo = open("ply-3.11.tar\dist\pruebas\caso_a.txt","r")
 parser = yacc.yacc()
-res = parser.parse("program PRUEBA; main () { cont = 2 + 3 * 8 * ( 2 + 4 ) }")
+res = parser.parse(archivo.read())
 
 #program PRUEBA; main () { cont = 2 + 3 * 8 * ( 2 + 4 ) }

@@ -23,6 +23,7 @@ tokens = [
 #palabras reservadas
 keywords = {
     'program' : 'PROGRAM',
+    'vars' : 'VARS',
     'void' : 'VOID',
     'main' : 'MAIN',
     'while' : 'WHILE',
@@ -46,7 +47,7 @@ keywords = {
     'circle' : 'CIRCLE',
     'size' : 'SIZE',  
     #tipos de datos
-    'int' : 'INT_TYPE',
+    'entero' : 'INT_TYPE',
     'float' : 'FLOAT_TYPE',
     'char' : 'CHAR_TYPE'
 

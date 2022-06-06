@@ -1,4 +1,4 @@
-ESP_MEM = 500 #Global
+ESP_MEM = 500 # Global
 
 # ATRIBUTOS DE LOS LIMITES
 # Limites globales
@@ -45,7 +45,11 @@ iniFltCNS = limIntCNS
 iniStrCNS = limFltCNS
 
 class MemVirtual:
-    def temporales(tipo):
+    def temporales(self, tipo):
+        global iniIntTMP
+        global iniFltTMP
+        global iniBoolTMP
+
         if tipo == "entero":
             if iniIntTMP < limIntTMP:
                 temp = iniIntTMP
@@ -68,6 +72,13 @@ class MemVirtual:
         return temp
 
     def memoria(tipo, espMem):
+        global iniIntGLB
+        global iniFltGLB
+        global iniStrGLB
+        global iniIntLC
+        global iniFltLC
+        global iniStrLC
+
         if espMem == "global":
             if tipo == "entero" :
                 if iniIntGLB < limIntGLB:
@@ -117,26 +128,4 @@ class MemVirtual:
         iniFltTMP = limIntTMP
         iniStrTMP = limFltTMP
         iniBoolTMP = limStrTMP
-
-#        elif espMem == "constante":
-#           if tipo == "entero" :
-#                if iniIntCNS < limIntCNS:
-#                    temp = iniIntCNS
-#                    iniIntCNS += 1
-#                else :
-#                    print("Error: ya no hay memoria")
-#            elif tipo == "float" :
-#                if iniFltCNS < limFltCNS:
-#                    temp = iniFltCNS
-#                    iniFltCNS += 1
-#                else :
-#                    print("Error: ya no hay memoria")
-#            elif tipo == "string" :
-#                if iniStrCNS < limStrCNS:
-#                    temp = iniStrCNS
-#                    iniStrCNS += 1
-#                else :
-#                    print("Error: ya no hay memoria")
-#        
-#        return temp
 

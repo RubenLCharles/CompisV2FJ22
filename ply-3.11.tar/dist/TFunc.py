@@ -44,3 +44,4 @@ class TFunc:
     def modificarVarsFunc(self, nombre, numParams):
          self.dicc[nombre]['numparams'] = numParams
     
+    
