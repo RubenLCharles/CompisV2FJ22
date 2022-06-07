@@ -1,0 +1,22 @@
+program PRUEBA; 
+function entero nom (entero : uno, float : dos);
+    { 
+        if( 5 > 2 )
+        then{
+            entero cont3 = 12;
+        }
+        else{
+            float cont4 = 15;
+        }
+        read()
+    }
+
+main () { 
+    entero cont = 5;
+    entero cont2 = 3;
+    while( 5 > 2 )
+    do
+    {
+        entero cont = 2 / 3 + 8 * ( 2 + 4 ) ;
+    }   
+    }

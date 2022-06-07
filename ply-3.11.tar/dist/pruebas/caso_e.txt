@@ -1,0 +1,5 @@
+program PRUEBA; 
+main () { 
+    entero cont = 2 + 4;
+    float cont2 = 6;
+}

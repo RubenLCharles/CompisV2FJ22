@@ -14,6 +14,7 @@ class TVars :
                 "tipo" : tipo,
                 "posMem" : posMem
             }
+        return True
     
     def buscarVar(self, nombre):
         if nombre in self.dicc.keys():

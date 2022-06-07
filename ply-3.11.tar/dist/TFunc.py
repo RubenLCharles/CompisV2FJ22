@@ -12,7 +12,7 @@ class TFunc:
 
     def agregarFunc(self, tipo, nombre, numParam, cantCuad):
         if nombre in self.dicc.keys():
-            print("ya existe")
+            print("ya existe la funcion")
         else:
             self.dicc[nombre] = {
                 "tipo" : tipo,

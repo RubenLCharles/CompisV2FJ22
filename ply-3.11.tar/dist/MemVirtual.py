@@ -71,7 +71,7 @@ class MemVirtual:
 
         return temp
 
-    def memoria(tipo, espMem):
+    def memoria(self, tipo, espMem):
         global iniIntGLB
         global iniFltGLB
         global iniStrGLB
@@ -119,7 +119,18 @@ class MemVirtual:
                 else :
                     print("Error: ya no hay memoria")
 
-    def eliminar():
+        return temp
+
+    def getMem(self, memoria):
+        if memoria >= 1500 and memoria < 2000:
+            return "entero"
+        elif memoria >= 2000 and memoria < 2500:
+            return "float"
+        else:
+            return "string"
+
+
+    def eliminar(self):
         iniIntLC = limStrGLB
         iniFltLC = limIntLC
         iniStrLC = limFltLC
@@ -129,3 +140,5 @@ class MemVirtual:
         iniStrTMP = limFltTMP
         iniBoolTMP = limStrTMP
 
+    #def obtenerTipo(self, direccion):
+     #   if direccion 
