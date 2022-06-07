@@ -1,3 +1,4 @@
+#Funcion que revisa dos tipos de operandos con un operador, los compara y si esta dentro de las asignaciones verdaderas regresara el valor correcto.
 def CuboSem(operand1,operand2,operator):
     if operand1 == "entero":
         if operand2 == "entero":

@@ -4,11 +4,13 @@ function entero nom (entero : uno, float : dos);
         if( 5 > 2 )
         then{
             entero cont3 = 12;
+            float cont5 = 90;
+            cont3 = 5;
         }
         else{
-            float cont4 = 15;
+            cont3 = 15;
         }
-        read()
+        write();
     }
 
 main () { 
@@ -18,5 +20,6 @@ main () {
     do
     {
         entero cont = 2 / 3 + 8 * ( 2 + 4 ) ;
+        cont2 = 5*2;
     }   
     }

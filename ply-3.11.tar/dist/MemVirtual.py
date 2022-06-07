@@ -45,6 +45,7 @@ iniFltCNS = limIntCNS
 iniStrCNS = limFltCNS
 
 class MemVirtual:
+    #Funcion que regresa el valor de un temporal de la memoria dependiendo de el tipo que se le mande
     def temporales(self, tipo):
         global iniIntTMP
         global iniFltTMP
@@ -71,6 +72,7 @@ class MemVirtual:
 
         return temp
 
+    #Funcion que regresa el espacio de memoria dependiendo de el scope que se mande ademas de el tipo de variable que se mande
     def memoria(self, tipo, espMem):
         global iniIntGLB
         global iniFltGLB
@@ -121,6 +123,7 @@ class MemVirtual:
 
         return temp
 
+    #Funcion que regresa el tipo de variable dependiendo de el numero asignado de memoria
     def getMem(self, memoria):
         if memoria >= 1500 and memoria < 2000:
             return "entero"
@@ -129,8 +132,16 @@ class MemVirtual:
         else:
             return "string"
 
-
+    #Fucnion creada para reiniciar los contadores de memoria
     def eliminar(self):
+        global iniIntLC 
+        global iniFltLC 
+        global iniStrLC
+        global iniIntTMP
+        global iniFltTMP
+        global iniStrTMP 
+        global iniBoolTMP
+        
         iniIntLC = limStrGLB
         iniFltLC = limIntLC
         iniStrLC = limFltLC
@@ -139,6 +150,3 @@ class MemVirtual:
         iniFltTMP = limIntTMP
         iniStrTMP = limFltTMP
         iniBoolTMP = limStrTMP
-
-    #def obtenerTipo(self, direccion):
-     #   if direccion 

@@ -1,4 +1,4 @@
-#from ast import Param
+#Diccionarios e imports usados en el proyecto
 from asyncio import create_subprocess_exec
 import ply.yacc as yacc
 from lexer import tokens
@@ -32,20 +32,9 @@ voidBool = False
 numVars = 0
 numParams = 0
 contArg = 0
+TVARS = TVars()
 MemVirtual = MemVirtual()
 
-# PRECEDENCIA DE OPERADORES
-precedencia = {
-    ('nonassoc', 'SEMIC'),
-    ('right', 'ASSIGN'),
-    ('left', 'NE_LOG'),
-    ('nonassoc', 'LT_LOG','LTE_LOG','GTE_LOG','GTE_LOG'),
-    ('left', 'PLUS_OP','MINUS_OP'),
-    ('left', 'MULT_OP', 'DIV_OP'),
-    ('left', 'LPAREN','RPAREN'),
-    ('left', 'LBRACK', 'RBRACK'),
-    ('left', 'LCURLY', 'RCURLY')
-}
 
 # INICIO
 def p_program(p):
@@ -233,20 +222,7 @@ def p_lec_aux(p):
 
 def p_escritura(p):
     '''
-    escritura : WRITE pn_secu3 LPAREN esc_aux RPAREN SEMIC pn_secu5
-    '''
-
-def p_esc_aux(p):
-    '''
-    esc_aux : STRING_CTE pn_secu4 esc_rec
-            | expresiones pn_secu4 esc_rec
-            | empty
-    '''
-
-def p_esc_rec(p):
-    '''
-    esc_rec : COMMA esc_aux
-            | empty
+    escritura : WRITE LPAREN RPAREN pn_secuPR SEMIC 
     '''
 
 def p_decision(p):
@@ -347,7 +323,7 @@ def p_factor(p):
     '''
     factor : LPAREN pn_expresion5 expresiones RPAREN pn_expresion6
            | cte
-           | ID
+           | ID pn_busqueda
            | llamada_func
     '''
 def p_cte(p):
@@ -361,6 +337,7 @@ def p_empty(p):
      'empty :'
      pass
 
+#Funcion para cambiar de contexto global a local y que la memoria se cambie
 def p_pn_cambioCtxt(p):
     '''
     pn_cambioCtxt : 
@@ -368,6 +345,7 @@ def p_pn_cambioCtxt(p):
     global nombFunc
     nombFunc = "local"
 
+#Buscamos en memoria el tipo de variable que es una variable y agregamos a la tablad e variables
 def p_pn_expresionID(p):
     '''
     pn_expresionID :
@@ -378,13 +356,23 @@ def p_pn_expresionID(p):
     pMemoria.append(MemVirtual.memoria(tipoAct, nombFunc))
     pOperan.append(p[-1])
     pm = pMemoria.pop()
-    print(nombre)
-    print(tipoAct)
-    print(pm)
-    #TVars.agregarVar(0, nombre, tipoAct, pm)
+    TVARS.agregarVar(nombre, tipoAct,pm)
     pMemoria.append(pm)
     
+#Busqueda de tipo en la tabla de variables
+def p_pn_busqueda(p):
+    '''
+    pn_busqueda :
+    '''
+    global nombFunc
+    global tipoAct
+    nombre = p[-1]
+    tipo = TVARS.buscarTipo(nombre)
+    pMemoria.append(TVARS.buscarposMem(nombre))
+    pOperan.append(p[-1])
+    pTipos.append(tipo)
 
+#funcion para una variable ya declarada que quiere tener una asignación nueva
 def p_pn_expresionID2(p):
     '''
     pn_expresionID2 :
@@ -392,12 +380,13 @@ def p_pn_expresionID2(p):
     global nombFunc
     global tipoAct
     nombre = p[-1]
-    tipo = TVars.buscarTipo(nombre)
-    print("tipol" + tipo)
+    tipo = TVARS.buscarTipo(nombre)
 
-    pMemoria.append(p[-1])
+
+    pMemoria.append(TVARS.buscarposMem(nombre))
     pOperan.append(p[-1])
 
+#Funciones para manejo de expresiones
 def p_pn_expresion1(p):
     '''
     pn_expresion1 : 
@@ -499,7 +488,7 @@ def p_pn_expresion7(p):
     pn_expresion7 :
 
     '''
-    if p[-1] != '>' and p[-1] != '<' and p[-1] != '<=' and p[-1] != '>=':
+    if p[-1] != '>' and p[-1] != '<' and p[-1] != '<=' and p[-1] != '>=' and p[-1] != '==':
         print("error")
     else:
         pOperad.append(p[-1])
@@ -509,8 +498,9 @@ def p_pn_expresion8(p):
     pn_expresion8 :
 
     '''
+    
     temp = pOperad[len(pOperad)-1]
-    if temp == '>' or temp == '<' or temp == '<=' or temp == '>=':
+    if temp == '>' or temp == '<' or temp == '<=' or temp == '>=' or temp == '==':
         derOperan = pOperan.pop()
         derTipo = pTipos.pop()
         derMemoria = pMemoria.pop()
@@ -570,6 +560,7 @@ def p_pn_expresion10(p) :
 Secuenciales
 '''
 
+#Funciones para secuenciales 
 def p_pn_secu1(p) :
     '''
     pn_secu1 :
@@ -613,7 +604,7 @@ def p_pn_secu3(p):
     '''
     pn_secu3 :
     '''
-    if p[-1] != 'read' or p[-1] != 'write' or p[-1] != 'return':
+    if p[-1] != 'read'  and p[-1] != 'return':
         print("error")
     else:
         pOperad.append(p[-1])
@@ -622,13 +613,20 @@ def p_pn_secu4(p):
     '''
     pn_secu4 :
     '''
-    if pOperad.top() == 'read' or pOperad.top() == 'write' or pOperad.top() == 'return':
+    temp = pOperad.pop()
+    if temp == 'read'  or temp == 'return':
+        pOperad.append(temp)
         operador = pOperad.pop()
         operando = pOperan.pop()
         memoria = pMemoria.pop()
 
         cuad.add(operador, memoria,'' , '')
-        
+
+def p_pn_secuPR(p): 
+    '''
+    pn_secuPR :
+    '''
+    cuad.add("PRINT","",'' , '')
 
 def p_pn_secu5(p):
     '''
@@ -636,20 +634,12 @@ def p_pn_secu5(p):
     '''
     pOperad.pop()
 
-# def p_pn_secu6(p):
-#   '''
-#    pn_secu6 : 
-#    '''
-#    operador = pOperad.pop()
-#    operando = pOperan.pop()
-#    tipo = pTipos.pop()
-#    cuad.add(operador, '','' , operando)
 
+#Puntos Neuralgicos para un IF 
 def p_pn_cond1(p):
     '''
     pn_cond1 :
     '''
-    
     tipo = pTipos.pop()
     if tipo != "error" :
         resultado = pOperan.pop()
@@ -662,8 +652,6 @@ def p_pn_cond2(p):
     pn_cond2 :
     '''
     ultimo = pSaltos.pop()
-    #cuadFill = (cuad[ultimo][0], cuad[ultimo][1],cuad[ultimo][2], cuad.len())
-    #cuad[ultimo] = cuadFill
     cuad.modify1(ultimo,pMemMod.pop(),cuad.len())
 
 
@@ -674,10 +662,10 @@ def p_pn_cond3(p):
     cuad.add('GOTO','','','')
     falso = pSaltos.pop()
     pSaltos.append(cuad.len()-1)
-    #cuadFill = (cuad[falso][0], cuad[falso][1],cuad[falso][2], cuad.len())
-    #cuad[falso] = cuadFill
     cuad.modify2(falso,cuad.len())
 
+
+#Puntos Neuralgicos para un WHILE
 def p_pn_loop1(p):
     '''
     pn_loop1 :
@@ -705,11 +693,10 @@ def p_pn_loop3(p):
     ultimo = pSaltos.pop()
     retorna = pSaltos.pop()
     cuad.add('GOTO', '', '', retorna)
-
-    #cuadFill = (cuad[ultimo][0], cuad[ultimo][1],cuad[ultimo][2], cuad.len())
-    #cuad[ultimo] = cuadFill
     cuad.modify1(ultimo,pMemMod.pop(),cuad.len())
 
+
+#Regresa el tipo actual(ultimo elemento)
 def p_pn_tipoAct(p):
     '''
     pn_tipoAct : 
@@ -719,8 +706,7 @@ def p_pn_tipoAct(p):
     pTipos.append(tipoAct)
 
 
-#Agregar Funcion
-
+#Puntos Neuralgicos para cracion funciones 
 def p_pn_parametrosTipo(p):
     '''
     pn_parametrosTipo : 
@@ -731,6 +717,7 @@ def p_pn_func1(p):
     '''
     pn_func1 :
     '''
+    global nombFunc
     nombFunc = p[-1]
     numParams = 0
 
@@ -751,13 +738,9 @@ def p_pn_func2(p):
     nombVar = p[-1]
     numParams = numParams+1
     numVars = numVars+1
-    print("tipoact: " + tipoAct)
-    print("nombfunc: " + nombFunc)
     posMem = MemVirtual.memoria(tipoAct, nombFunc)
     dirFunc.agregarVarFunc(nombFunc, nombVar, posMem)
-    print("llego a func2")
 
-    
 def p_pn_func3(p):
     '''
     pn_func3 : 
@@ -771,6 +754,8 @@ def p_pn_func4(p):
     MemVirtual.eliminar()
     cuad.add("ENDFUNC",'','','')
 
+
+#Puntos Neuralgicos para las llamadas de funciones
 def p_pn_llamFunc1(p):
     '''
     pn_llamFunc1 :
@@ -809,6 +794,7 @@ def p_pn_llamFunc3(p):
         pMemoria.append(MemVirtual.temporales(tipoFunc))
         pTipos.append(tipoFunc)
 
+#Punto Neuralgico para que se genere cuadruplo de gotomain
 def p_pn_GotoMain(p):
     '''
     pn_GotoMain :
@@ -816,6 +802,7 @@ def p_pn_GotoMain(p):
     cuad.add("GOTO",'','','')
     pSaltos.append(p[-1])
 
+#Punto Neuralgico que se encarga de las constantes
 def p_pn_constante(p):
     '''
     pn_constante :
@@ -861,21 +848,19 @@ def p_pn_print(p):
     '''
     pn_print :
     '''
-    print("operadores")
-    print(pOperad)
-    print("operandos")
-    print(pOperan)
-    print("cuads:")
+    print("Cuads:")
     cuad.print()
+    print("operadores:")
+    print(pOperad)
+    print("operandos:")
+    print(pOperan)
     print("Tipos:")
     print(pTipos)
-    print("Saltos")
+    print("Saltos:")
     print(pSaltos)
 
 # Pruebas
-archivo = open("ply-3.11.tar\dist\pruebas\caso_d.txt","r")
-#ply-3.11.tar\dist\pruebas\caso_b.txt
+archivo = open("/Users/diegovillarreal/Downloads/CompisV2FJ22 4/ply-3.11.tar/dist/pruebas/caso_e.txt","r")
 parser = yacc.yacc()
 res = parser.parse(archivo.read())
 
-#program PRUEBA; main () { cont = 2 + 3 * 8 * ( 2 + 4 ) }

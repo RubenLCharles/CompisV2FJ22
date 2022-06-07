@@ -1,5 +1,27 @@
 program PRUEBA; 
 main () { 
-    entero cont = 2 + 4;
-    float cont2 = 6;
+    entero a = 0;
+    entero b = 1;
+    entero c = 0;
+    entero x = 2;
+    entero n = 10;
+
+    if (10 == 0) then {
+        write();
+    }
+    else{
+        if (10 == 1) then{
+            write();
+        }
+        else{
+          while(x > 10)do{
+            c = a + b;
+            a = b;
+            b = c;
+          }
+        write();
+        }
+        
+        
+    }
 }

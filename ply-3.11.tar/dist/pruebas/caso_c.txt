@@ -1,8 +1,7 @@
 program PRUEBA; 
 
 main () { 
-    entero cont = 5;
-    entero cont2 = 3;
+    
     while( 5 > 2 )
     do
     {
