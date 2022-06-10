@@ -1,4 +1,10 @@
 program PRUEBA; 
 main () { 
     entero cont = 2 / 3 + 8 * ( 2 + 4 ) ;
+    cont = 5 ;
+    cont = 1;
+    cont = 3;
+    cont = 9;
+    cont = 2 ;
+    cont = 5;
     }

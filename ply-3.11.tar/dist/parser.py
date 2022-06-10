@@ -1,5 +1,6 @@
 #Diccionarios e imports usados en el proyecto
 from asyncio import create_subprocess_exec
+import json
 import ply.yacc as yacc
 from lexer import tokens
 import re
@@ -8,10 +9,14 @@ from CuboSem import *
 from cuadruplos import *
 from TFunc import *
 from MemVirtual import *
+from Constantes import *
+from MaquinaVirtual import *
+import ast
 
 # Globales y pilas
 cuad = cuadruplos()
 dirFunc = TFunc()
+consta = Constantes()
 pOperad = []
 pOperan = []
 pTipos = []
@@ -24,6 +29,7 @@ cteFlt = []
 cteStr = []
 pMemMod = []
 espMem = 500
+cuadJump = []
 nombFunc = "global"
 nombVar = ""
 tipoAct = ""   
@@ -38,7 +44,7 @@ MemVirtual = MemVirtual()
 
 # INICIO
 def p_program(p):
-    'program : PROGRAM ID SEMIC dec_var_gob def_funciones main pn_print'
+    'program : PROGRAM ID pn_GotoMain SEMIC dec_var_gob def_funciones main pn_final pn_print '
 
 # VARIABLES Y TIPOS
 def p_dec_var_gob(p):
@@ -123,7 +129,7 @@ def p_param_aux(p):
 
 def p_main(p):
     '''
-    main : MAIN LPAREN RPAREN pn_cambioCtxt bloque
+    main : MAIN LPAREN RPAREN pn_FillMain pn_cambioCtxt bloque
     '''
 
 
@@ -172,7 +178,7 @@ def p_declaracion_aux(p):
 
 def p_llamada_func(p):
     '''
-    llamada_func : ID pn_llamFunc1 LPAREN pn_expresion5 llamada_func_aux RPAREN pn_expresion6 pn_llamFunc3 SEMIC
+    llamada_func : LLAMA ID pn_llamFunc1 LPAREN pn_expresion5 llamada_func_aux RPAREN pn_expresion6 pn_llamFunc3 SEMIC
     '''
 
 def p_llamada_func_aux(p):
@@ -189,7 +195,7 @@ def p_llama_func_auxb(p):
 
 def p_llamada_void(p):
     '''
-    llamada_void : ID pn_llamFunc1 LPAREN llamada_void_aux RPAREN pn_llamFunc3 SEMIC
+    llamada_void : LLAMA ID pn_llamFunc1 LPAREN llamada_void_aux RPAREN pn_llamFunc3 SEMIC
     '''
 
 def p_llamada_void_aux(p):
@@ -222,7 +228,7 @@ def p_lec_aux(p):
 
 def p_escritura(p):
     '''
-    escritura : WRITE LPAREN RPAREN pn_secuPR SEMIC 
+    escritura : WRITE LPAREN  RPAREN pn_secuPR2 SEMIC 
     '''
 
 def p_decision(p):
@@ -233,7 +239,7 @@ def p_decision(p):
 def p_else(p):
     '''
     else : ELSE pn_cond3 bloque
-        | empty
+         | empty
     '''
 
 def p_loop_cond(p):
@@ -309,7 +315,7 @@ def p_m_rec(p):
 
 def p_termino(p):
     '''
-    termino :    factor pn_expresion4 term_rec
+    termino : factor pn_expresion4 term_rec
     '''
 
 def p_term_rec(p):
@@ -321,10 +327,10 @@ def p_term_rec(p):
 
 def p_factor(p):
     '''
-    factor : LPAREN pn_expresion5 expresiones RPAREN pn_expresion6
+    factor : llamada_func
+           | LPAREN pn_expresion5 expresiones RPAREN pn_expresion6
            | cte
            | ID pn_busqueda
-           | llamada_func
     '''
 def p_cte(p):
     '''
@@ -385,6 +391,7 @@ def p_pn_expresionID2(p):
 
     pMemoria.append(TVARS.buscarposMem(nombre))
     pOperan.append(p[-1])
+    pTipos.append(tipo)
 
 #Funciones para manejo de expresiones
 def p_pn_expresion1(p):
@@ -397,6 +404,13 @@ def p_pn_expresion1(p):
     else:
         pOperad.append(p[-1])
     
+def p_pn_secuPR2(p):
+    '''
+    pn_secuPR2 :
+    '''
+    resPR = pMemoria.pop()
+    pTipos.pop()
+    cuad.add("PRINT", resPR, '', '')
 
 def p_pn_expresion2(p):
     '''
@@ -643,6 +657,7 @@ def p_pn_cond1(p):
     tipo = pTipos.pop()
     if tipo != "error" :
         resultado = pOperan.pop()
+       
         cuad.add('GOTOF',resultado,'','')
         pSaltos.append(cuad.len()-1)
         pMemMod.append(resultado)
@@ -651,18 +666,23 @@ def p_pn_cond2(p):
     '''
     pn_cond2 :
     '''
-    ultimo = pSaltos.pop()
-    cuad.modify1(ultimo,pMemMod.pop(),cuad.len())
+    global cuad
+   
+    falso = pSaltos.pop()
+    cuad.modify2(falso,cuad.len())
+    
 
 
 def p_pn_cond3(p):
     '''
     pn_cond3 :
     '''
+    global cuad
     cuad.add('GOTO','','','')
-    falso = pSaltos.pop()
+    ultimo = pSaltos.pop()
+    cuad.modify1(ultimo,pMemMod.pop(),cuad.len())
     pSaltos.append(cuad.len()-1)
-    cuad.modify2(falso,cuad.len())
+    
 
 
 #Puntos Neuralgicos para un WHILE
@@ -706,11 +726,12 @@ def p_pn_tipoAct(p):
     pTipos.append(tipoAct)
 
 
-#Puntos Neuralgicos para cracion funciones 
+#Puntos Neuralgicos para creacion funciones 
 def p_pn_parametrosTipo(p):
     '''
     pn_parametrosTipo : 
     '''
+    global tipoActVar
     tipoActVar = p[-1]
 
 def p_pn_func1(p):
@@ -718,6 +739,7 @@ def p_pn_func1(p):
     pn_func1 :
     '''
     global nombFunc
+    global voidBool
     nombFunc = p[-1]
     numParams = 0
 
@@ -770,9 +792,10 @@ def p_pn_llamFunc2(p):
     '''
     pn_llamFunc2 :
     '''
+    global contArg
     pOperan.pop()
     pTipos.pop()
-    pFunc.pop()
+    #pFunc.pop()
     argMem = pMemoria.pop()
     contArg += 1
 
@@ -785,12 +808,12 @@ def p_pn_llamFunc3(p):
     nomFunc = pFunc.pop()
     cantCuad = dirFunc.dicc[nomFunc]['cantCuad']
 
-    cuad.add("GOSUB",nomFunc,len(cuad)+1, cantCuad)
+    cuad.add("GOSUB",nomFunc,cuad.len()+1, cantCuad)
     tipoFunc = dirFunc.dicc[nomFunc]['tipo']
 
     if tipoFunc != "void":
         cuad.add("=",nomFunc,"",MemVirtual.temporales(tipoFunc))
-        pOperan.append(MemVirtual.temporales(tipoFunc))
+        pOperan.append(MemVirtual.temporales(tipoFunc)) #cambio
         pMemoria.append(MemVirtual.temporales(tipoFunc))
         pTipos.append(tipoFunc)
 
@@ -800,7 +823,12 @@ def p_pn_GotoMain(p):
     pn_GotoMain :
     '''
     cuad.add("GOTO",'','','')
-    pSaltos.append(p[-1])
+
+def p_pn_FillMain(p):
+    '''
+    pn_FillMain :
+    '''
+    cuad.modify3(cuad.len())
 
 #Punto Neuralgico que se encarga de las constantes
 def p_pn_constante(p):
@@ -812,38 +840,48 @@ def p_pn_constante(p):
     global iniStrCNS
 
     if type(p[-1]) == int :
-        if p[-1] not in cteInt :
+        if not consta.check(p[-1]) :
             if iniIntCNS < limIntCNS :
                 cteInt.append(p[-1])
+                consta.add(p[-1],iniIntCNS)
                 iniIntCNS += 1
             else :
                 print("Error: ya no hay memoria")
         pOperan.append(p[-1])
-        pMemoria.append(p[-1])
+        pMemoria.append(consta.regresaMem(p[-1]))
         pTipos.append("entero")
 
     elif type(p[-1]) == float :
-        if p[-1] not in cteFlt :
+        if not consta.check(p[-1]) :
             if iniFltCNS < limFltCNS :
                 cteFlt.append(p[-1])
+                consta.add(p[-1],iniIntCNS)
                 iniFltCNS += 1
             else :
                 print("Error: ya no hay memoria")
         pOperan.append(p[-1])
-        pMemoria.append(p[-1])
+        pMemoria.append(consta.regresaMem(p[-1]))
         pTipos.append("float")
     
     elif type(p[-1]) == str :
-        if p[-1] not in cteStr :
+        if not consta.check(p[-1]) :
             if iniStrCNS < limStrCNS :
                 cteStr.append(p[-1])
+                consta.add(p[-1],iniIntCNS)
                 iniStrCNS += 1
             else :
                 print("Error: ya no hay memoria")
         pOperan.append(p[-1])
-        pMemoria.append(p[-1])
+        pMemoria.append(consta.regresaMem(p[-1]))
         pTipos.append("string")
 
+def p_pn_final(p):
+    '''
+    pn_final :
+    '''    
+    cuad.add("ENDOFPROGRAM", '', '', '')
+
+    
 def p_pn_print(p):
     '''
     pn_print :
@@ -858,9 +896,16 @@ def p_pn_print(p):
     print(pTipos)
     print("Saltos:")
     print(pSaltos)
+    print("Constantes:")
+    cuad.toJson()
+    consta.print()
+    consta.toJson()
+    #cuad.maquinaVirtualRun()
+    
 
+    
 # Pruebas
-archivo = open("/Users/diegovillarreal/Downloads/CompisV2FJ22 4/ply-3.11.tar/dist/pruebas/caso_e.txt","r")
+archivo = open("ply-3.11.tar\dist\pruebas\caso_d.txt","r")
 parser = yacc.yacc()
 res = parser.parse(archivo.read())
 

@@ -3,7 +3,7 @@ main () {
     entero a = 0;
     entero b = 1;
     entero c = 0;
-    entero x = 2;
+    entero x = 1;
     entero n = 10;
 
     if (10 == 0) then {

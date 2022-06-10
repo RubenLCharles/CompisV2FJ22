@@ -1,14 +1,17 @@
+import json
 #Lista de cuadruplos
 cuad = []
+
 
 class cuadruplos():
 
     #Agregamos cuadruplos
     def add(self, op, opnA, opnB, res):
-        cuad.append([(op, opnA, opnB, res)])
+        cuad.append((op, opnA, opnB, res))
 
     #Imprimimos cuadruplos
     def print(self):
+        global cuadAct
         x = 0
         while x < len(cuad):
             print(cuad[x])
@@ -27,4 +30,12 @@ class cuadruplos():
     #Funcion que modifica el goto con la memoria y el resultado de a donde viene
     def modify2(self, place,result):
         cuad[place] = ('GOTO','','',result)
-       
+
+    def modify3(self, salto):
+        cuad[0] = ('GOTOMAIN','','',salto)
+
+    def toJson(self):
+        archivo = open("ply-3.11.tar\dist\generados.json", 'w')
+        temp = json.dumps(cuad)
+        archivo.write(temp)
+        archivo.close()

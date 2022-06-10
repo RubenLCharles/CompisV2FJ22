@@ -45,7 +45,8 @@ keywords = {
     'penup' : 'PENUP',
     'pendown' : 'PENDOWN',
     'circle' : 'CIRCLE',
-    'size' : 'SIZE',  
+    'size' : 'SIZE', 
+    'llama' : 'LLAMA',
     #tipos de datos
     'entero' : 'INT_TYPE',
     'float' : 'FLOAT_TYPE',

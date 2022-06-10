@@ -6,9 +6,12 @@ main () {
     if( cont > cont2 )
     then{
         entero cont3 = 12;
+        cont = 19;
     }
     else{
         float cont4 = 15;
+        cont = 7;
+        cont2 = 9;
     }
    
     }

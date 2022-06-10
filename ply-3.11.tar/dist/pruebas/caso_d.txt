@@ -8,18 +8,15 @@ function entero nom (entero : uno, float : dos);
             cont3 = 5;
         }
         else{
-            cont3 = 15;
+            entero cont3 = 15;
         }
         write();
     }
-
+    
 main () { 
-    entero cont = 5;
-    entero cont2 = 3;
-    while( 5 > 2 )
-    do
-    {
-        entero cont = 2 / 3 + 8 * ( 2 + 4 ) ;
-        cont2 = 5*2;
-    }   
-    }
+    entero cont = 0;
+    
+    llama nom (2, 3);
+    cont2 = 6;
+
+}
